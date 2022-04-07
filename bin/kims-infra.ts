@@ -4,6 +4,7 @@ import * as cdk from 'aws-cdk-lib';
 import * as dotenv from 'dotenv';
 import * as fs from 'fs';
 import {KimsServerStack} from '../lib/kims-server-stack';
+import {KimsClientStack} from '../lib/kims-client-stack';
 
 export interface AwsEnvMap {
     AWS_ACCOUNT: string;
@@ -13,6 +14,9 @@ export interface AwsEnvMap {
 export interface ClientEnvMap {
     CLIENT_RELEASE: string;
     API_URL: string;
+    CLOUD_FRONT_CERTIFICATE: string;
+    S3_RELEASE_BUCKET: string;
+    APP_DOMAIN_PREFIX: string
 }
 
 export interface ServerEnvMap {
@@ -81,5 +85,5 @@ const myStackProps = loadMyStackProps();
 const app = new cdk.App();
 
 new KimsServerStack(app, 'KimsServerStack', myStackProps);
-//new KimsClientStack(app, 'KimsClientStack', myStackProps);
+new KimsClientStack(app, 'KimsClientStack', myStackProps);
 

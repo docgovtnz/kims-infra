@@ -1,4 +1,7 @@
 {
-  "CLIENT_RELEASE": "1.0.11",
-  "API_URL": "https://api2.base-stack.net"
+  "CLIENT_RELEASE": "0.0.0",
+  "API_URL": "https://api.kims-dev.docsandpit.net.nz",
+  "CLOUD_FRONT_CERTIFICATE": "arn:aws:acm:us-east-1:252379044400:certificate/afba18b2-b7fb-48b7-85f1-c1ba0b9a680a",
+  "S3_RELEASE_BUCKET": "kims-dev-release",
+  "APP_DOMAIN_PREFIX": "kims-dev"
 }
