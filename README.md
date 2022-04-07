@@ -4,10 +4,33 @@ This project creates and helps to manage the CloudFormation stacks of the KIMS a
 
 ## Setup
 
-1. You need to have your AWS CLI credentials file setup with the "aws_access_key_id" and "aws_secret_access_key" for the
-account/environment you wish to deploy.
+1. You need to install the following
+ - AWS-CLI; https://aws.amazon.com/cli/
+ - AWS CDK; https://aws.amazon.com/cdk/ (npm -g install typescript)
 
-2. These scripts depend on the following environment variables to select the properties of the environment you wish to
+2. You need to have your AWS CLI credentials file setup with the "aws_access_key_id" and "aws_secret_access_key" for the
+account/environment you wish to deploy. There are multiple ways of managing these but the following seems to be the best
+way for this project.
+ - Login to the DOC AWS SSO form; https://docau.awsapps.com/start#/
+ - Click on the "Command line or programmatic access" for the AWS account you will be working with
+ - Select Option 2: Add a profile to your AWS credentials file
+ - Copy the text of credentials (these expire after a few hour, so you have to do this quite often)
+ - Add these to your ~/.aws/credentials file
+ - Set the following environment variable either globally or in the shell where you are working. Watch out for how the
+   account number is different for different accounts.
+
+   export AWS_DEFAULT_PROFILE=252379044400_Administer-ROLE
+
+From this point onwards you should be ok to run the various scripts and CDK deployment commands.
+
+TIP: One good way of checking if your credentials are still valid and that you are pointed at the right environment is
+to do a quick S3 directory listing from the command line of where you want to run the next CDK script from;
+
+```shell
+aws s3 ls
+```
+
+4. These scripts depend on the following environment variables to select the properties of the environment you wish to
 deploy the application into.
 
 ENV_HOME - the directory of where all the different environments are held
@@ -22,4 +45,20 @@ export ENV_NAME=dev
 
 To deploy any release of Kims to any environment do the following steps
 
-1. Set the ENV_NAME environment TODO...
+1. Login to AWS and setup your AWS credentials as outlined above
+2. Set the ENV_HOME and ENV_NAME variables to point to the application environment you want to work with (see above)
+3. Run the CDK deployment with
+
+```shell
+cdk deploy KimsServerStack
+cdk deploy KimsClientStack
+```
+
+Wait. And then wait some more. CDK/Cloudformation can take anywhere from a few mins to over an hour. It can also fail
+for all sorts of reasons.
+
+TIPS
+ - "cdk ls" will give you a list of the stack names available for deployment, handy if you can't remember them
+ - Sometimes it's better to "Delete" the Cloudformation stack first and then deploy the new one. It can be slow and 
+ error prone to do an "update" but is better at doing a "delete" followed by the "create".
+
