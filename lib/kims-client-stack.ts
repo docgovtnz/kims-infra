@@ -2,6 +2,14 @@ import * as cdk from 'aws-cdk-lib';
 import {Stack} from 'aws-cdk-lib';
 import {Construct} from 'constructs';
 import {MyStackProps} from '../bin/kims-infra';
+import {
+    AllowedMethods,
+    CacheHeaderBehavior,
+    CacheQueryStringBehavior,
+    OriginProtocolPolicy,
+    OriginSslPolicy,
+    ViewerProtocolPolicy
+} from 'aws-cdk-lib/aws-cloudfront';
 
 export class KimsClientStack extends Stack {
     constructor(scope: Construct, id: string, props: MyStackProps) {
@@ -35,6 +43,26 @@ export class KimsClientStack extends Stack {
 
         distribution.addBehavior('index.html', origin, {
             cachePolicy: cdk.aws_cloudfront.CachePolicy.CACHING_DISABLED
+        });
+
+        const apiDomainName = props.serverEnvMap.API_DOMAIN_PREFIX + '.' + props.serverEnvMap.BASE_DOMAIN_NAME;
+        const apiHttpOrigin = new cdk.aws_cloudfront_origins.HttpOrigin(apiDomainName, {
+            protocolPolicy: OriginProtocolPolicy.HTTPS_ONLY,
+            originSslProtocols: [OriginSslPolicy.TLS_V1_2]
+        });
+
+        const apiCachePolicy = new cdk.aws_cloudfront.CachePolicy(this, 'ApiCachePolicy', {
+            cachePolicyName: props.clientEnvMap.APP_DOMAIN_PREFIX + '-api-cache-policy',
+            headerBehavior: CacheHeaderBehavior.allowList('Authorization'),
+            queryStringBehavior: CacheQueryStringBehavior.all(),
+            enableAcceptEncodingBrotli: true,
+            enableAcceptEncodingGzip: true
+        });
+
+        distribution.addBehavior('api/*', apiHttpOrigin, {
+            cachePolicy: apiCachePolicy,
+            viewerProtocolPolicy: ViewerProtocolPolicy.HTTPS_ONLY,
+            allowedMethods: AllowedMethods.ALLOW_ALL
         });
 
         const hostedZone = cdk.aws_route53.HostedZone.fromHostedZoneAttributes(this, 'HostedZone', {

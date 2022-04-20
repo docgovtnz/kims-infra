@@ -1,8 +1,10 @@
 {
-  "CLIENT_RELEASE": "0.0.0",
+  "CLIENT_RELEASE": "0.0.2",
   "PRODUCTION_MODE": true,
-  "API_URL": "https://api.kims-dev.docsandpit.net.nz",
+  "API_URL": "api",
   "CLOUD_FRONT_CERTIFICATE": "arn:aws:acm:us-east-1:252379044400:certificate/afba18b2-b7fb-48b7-85f1-c1ba0b9a680a",
   "S3_RELEASE_BUCKET": "kims-dev-release",
-  "APP_DOMAIN_PREFIX": "kims-dev"
+  "APP_DOMAIN_PREFIX": "kims-dev",
+  "AUTHENTICATION_PROVIDER": "FIREBASE"
 }
+
