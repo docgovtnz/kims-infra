@@ -38,8 +38,12 @@ export class KimsClientStack extends Stack {
         // happens to be using the release bucket, but it's really a different bucket, just trying to avoid having
         // too many buckets.
         distribution.addBehavior('client.json', new cdk.aws_cloudfront_origins.S3Origin(releaseBucket, {
-            originPath: `env/${process.env.ENV_NAME}`
-        }));
+            originPath: `env/${process.env.ENV_NAME}`,
+        }), {
+            // It is only downloaded once each time the App launches, but needs to be fresh otherwise settings and things
+            // like version numbers will be wrong
+            cachePolicy: cdk.aws_cloudfront.CachePolicy.CACHING_DISABLED
+        });
 
         distribution.addBehavior('index.html', origin, {
             cachePolicy: cdk.aws_cloudfront.CachePolicy.CACHING_DISABLED
