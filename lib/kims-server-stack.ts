@@ -8,7 +8,22 @@ export class KimsServerStack extends Stack {
     constructor(scope: Construct, id: string, props: MyStackProps) {
         super(scope, id, props);
 
-        const lambdaFunctionName = props.serverEnvMap.APP_NAME_PREFIX + 'ProxyFunction';
+        const lambdaFunctionName = props.serverEnvMap.APP_NAME_PREFIX + '-docker-function';
+
+        const vpc = cdk.aws_ec2.Vpc.fromLookup(this, 'VPC', {
+            region: props.awsEnvMap.AWS_REGION,
+            vpcId: 'vpc-a317a5c7'
+        });
+
+        const subnets = [
+            cdk.aws_ec2.Subnet.fromSubnetId(this, 'subnet-ce5de597', 'subnet-ce5de597'),
+            cdk.aws_ec2.Subnet.fromSubnetId(this, 'subnet-704c2f06', 'subnet-704c2f06'),
+            cdk.aws_ec2.Subnet.fromSubnetId(this, 'subnet-a32f56c7', 'subnet-a32f56c7'),
+        ];
+
+        const securityGroups = [
+            cdk.aws_ec2.SecurityGroup.fromLookupById(this, 'sg-70a03a17', 'sg-70a03a17')
+        ]
 
         const repo = cdk.aws_ecr.Repository.fromRepositoryName(this, props.serverEnvMap.ECR_REPOSITORY_NAME, props.serverEnvMap.ECR_REPOSITORY_NAME);
         const dockerImageFunction = new cdk.aws_lambda.DockerImageFunction(this, lambdaFunctionName, {
@@ -18,6 +33,11 @@ export class KimsServerStack extends Stack {
             }),
             timeout: Duration.seconds(30),
             functionName: lambdaFunctionName,
+            securityGroups: securityGroups,
+            vpc: vpc,
+            vpcSubnets: {
+                subnets: subnets
+            }
         });
 
         if(dockerImageFunction.role) {
@@ -45,6 +65,9 @@ export class KimsServerStack extends Stack {
                     's3:GetObject',
                 ]
             }));
+
+            const awsLambdaVPCAccessExecutionRole = cdk.aws_iam.ManagedPolicy.fromAwsManagedPolicyName('service-role/AWSLambdaVPCAccessExecutionRole');
+            dockerImageFunction.role.addManagedPolicy(awsLambdaVPCAccessExecutionRole);
         }
 
         // Lookup the zone (assumes this exists already)
@@ -53,30 +76,40 @@ export class KimsServerStack extends Stack {
             zoneName: props.serverEnvMap.BASE_DOMAIN_NAME
         });
 
-        const apiDomainName = props.serverEnvMap.API_DOMAIN_PREFIX + '.' + props.serverEnvMap.BASE_DOMAIN_NAME;
+        //const apiDomainName = props.serverEnvMap.API_DOMAIN_PREFIX + '.' + props.serverEnvMap.BASE_DOMAIN_NAME;
 
         // Create a certificate before we have the DNS records setup, but that's ok
-        const apiCertificate = new cdk.aws_certificatemanager.Certificate(this, 'ApiCertificate', {
-            domainName: apiDomainName,
-            validation: cdk.aws_certificatemanager.CertificateValidation.fromDns(hostedZone)
-        });
+        // const apiCertificate = new cdk.aws_certificatemanager.Certificate(this, 'ApiCertificate', {
+        //     domainName: apiDomainName,
+        //     validation: cdk.aws_certificatemanager.CertificateValidation.fromDns(hostedZone)
+        // });
+
+        // OR: lookup the certificate from one that has already been created
+        // const apiCertificate = cdk.aws_certificatemanager.Certificate.fromCertificateArn(this, 'Certificate', props.serverEnvMap.API_CERTIFICATE_ARN);
+
 
         // Defines an API Gateway REST API resource backed by our lambda function and link it to both the
         // domain name and the certificate
         const api = new cdk.aws_apigateway.LambdaRestApi(this, props.serverEnvMap.APP_NAME_PREFIX + 'Endpoint', {
             handler: dockerImageFunction,
-            domainName: {
-                domainName: apiDomainName,
-                certificate: apiCertificate,
-            }
+
+            // domainName: {
+            //     domainName: apiDomainName,
+            //     certificate: apiCertificate,
+            // }
         });
 
         // The tricky bit is that this gets done last so that it can target the ApiGateway and also note that the
         // recordName is the "short" part of the name and not the whole thing.
-        const route53ARecord = new cdk.aws_route53.ARecord(this, 'Route53ARecord', {
-            zone: hostedZone,
-            recordName: props.serverEnvMap.API_DOMAIN_PREFIX,
-            target: cdk.aws_route53.RecordTarget.fromAlias(new cdk.aws_route53_targets.ApiGateway(api))
+        // const route53ARecord = new cdk.aws_route53.ARecord(this, 'Route53ARecord', {
+        //     zone: hostedZone,
+        //     recordName: props.serverEnvMap.API_DOMAIN_PREFIX,
+        //     target: cdk.aws_route53.RecordTarget.fromAlias(new cdk.aws_route53_targets.ApiGateway(api))
+        // });
+
+        new cdk.CfnOutput(this, 'restApiId', {
+            exportName: props.serverEnvMap.APP_NAME_PREFIX + 'RestApiId',
+            value: api.restApiId
         });
     }
 }

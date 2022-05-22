@@ -21,7 +21,7 @@ export class KimsClientStack extends Stack {
 
         const webAppDomainName = props.clientEnvMap.APP_DOMAIN_PREFIX + '.' + props.serverEnvMap.BASE_DOMAIN_NAME;
 
-        const distribution = new cdk.aws_cloudfront.Distribution(this, 'MyCloudFrontDist', {
+        const distribution = new cdk.aws_cloudfront.Distribution(this, props.serverEnvMap.APP_NAME_PREFIX + 'CloudFront', {
             defaultBehavior: {
                 origin: origin,
                 allowedMethods: cdk.aws_cloudfront.AllowedMethods.ALLOW_ALL,
@@ -49,10 +49,25 @@ export class KimsClientStack extends Stack {
             cachePolicy: cdk.aws_cloudfront.CachePolicy.CACHING_DISABLED
         });
 
-        const apiDomainName = props.serverEnvMap.API_DOMAIN_PREFIX + '.' + props.serverEnvMap.BASE_DOMAIN_NAME;
+
+        // Find out what the APIGateway address is of the Lambda function
+        // const api = cdk.aws_apigateway.RestApi.fromRestApiAttributes(this, 'RestApi', {
+        //
+        // })
+
+        //const apiDomainName = props.serverEnvMap.API_DOMAIN_PREFIX + '.' + props.serverEnvMap.BASE_DOMAIN_NAME;
+        //const apiDomainName = 'i8o79qtdj4.execute-api.ap-southeast-2.amazonaws.com';
+
+        // Lookup the output value from the KimsServerStack and use that as part of a naming pattern
+        const restApiId = cdk.Fn.importValue(props.serverEnvMap.APP_NAME_PREFIX + 'RestApiId');
+        // We could do a lookup of the resource and ask it for the domain name, but the name we want follows a standard
+        // naming pattern, so we can cheat a little and follow the standard naming pattern.
+        const apiDomainName = `${restApiId}.execute-api.ap-southeast-2.amazonaws.com`;
+
         const apiHttpOrigin = new cdk.aws_cloudfront_origins.HttpOrigin(apiDomainName, {
             protocolPolicy: OriginProtocolPolicy.HTTPS_ONLY,
-            originSslProtocols: [OriginSslPolicy.TLS_V1_2]
+            originSslProtocols: [OriginSslPolicy.TLS_V1_2],
+            originPath: '/prod'
         });
 
         const apiCachePolicy = new cdk.aws_cloudfront.CachePolicy(this, 'ApiCachePolicy', {
@@ -74,10 +89,16 @@ export class KimsClientStack extends Stack {
             zoneName: props.serverEnvMap.BASE_DOMAIN_NAME
         });
 
-        const cname = new cdk.aws_route53.CnameRecord(this, 'Cname', {
-            recordName: props.clientEnvMap.APP_DOMAIN_PREFIX,
-            domainName: distribution.domainName,
+        // const cname = new cdk.aws_route53.CnameRecord(this, 'Cname', {
+        //     recordName: props.clientEnvMap.APP_DOMAIN_PREFIX,
+        //     domainName: distribution.domainName,
+        //     zone: hostedZone,
+        // });
+
+        new cdk.aws_route53.ARecord(this, 'ARecord', {
             zone: hostedZone,
+            recordName: props.clientEnvMap.APP_DOMAIN_PREFIX,
+            target: cdk.aws_route53.RecordTarget.fromAlias(new cdk.aws_route53_targets.CloudFrontTarget(distribution))
         });
     }
 }

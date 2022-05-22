@@ -29,11 +29,13 @@ export interface ServerEnvMap {
     BASE_DOMAIN_NAME: string;
     HOSTED_ZONE_ID: string;
     API_DOMAIN_PREFIX: string;
+    API_CERTIFICATE_ARN: string;
     META_BUCKET_NAME: string;
     ECR_REPOSITORY_NAME: string;
 }
 
 export interface MyStackProps extends cdk.StackProps {
+    awsEnvMap: AwsEnvMap;
     clientEnvMap: ClientEnvMap;
     serverEnvMap: ServerEnvMap;
 }
@@ -53,10 +55,11 @@ const loadMyStackProps = (): MyStackProps  => {
     const rawClientJson = fs.readFileSync(envDir + 'client.json').toString();
     const clientEnvMap = JSON.parse(rawClientJson);
     const serverEnvMap = dotenv.config({path: envDir + 'server.env'}).parsed as unknown as ServerEnvMap;
-    const awsEnvMap = dotenv.config({path: envDir + 'server.env'}).parsed as unknown as AwsEnvMap;
+    const awsEnvMap = dotenv.config({path: envDir + 'aws.env'}).parsed as unknown as AwsEnvMap;
 
     const myStackProps: MyStackProps = {
-        clientEnvMap: clientEnvMap as unknown as ClientEnvMap,
+        awsEnvMap: awsEnvMap,
+        clientEnvMap: clientEnvMap,
         serverEnvMap: serverEnvMap,
         env: { account: awsEnvMap.AWS_ACCOUNT, region: awsEnvMap.AWS_REGION },
     }
