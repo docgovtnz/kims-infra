@@ -8,6 +8,7 @@
   "AUTHENTICATION_PROVIDER": "FIREBASE",
   "DATE_FORMAT": "dd MMM yyyy",
   "DATE_TIME_FORMAT": "dd MMM yyyy HH:mm",
-  "TIME_FORMAT": "HH:mm"
+  "TIME_FORMAT": "HH:mm",
+  "DEBUG": false
 }
 

@@ -107,9 +107,22 @@ export class KimsServerStack extends Stack {
         //     target: cdk.aws_route53.RecordTarget.fromAlias(new cdk.aws_route53_targets.ApiGateway(api))
         // });
 
+        new cdk.CfnOutput(this, 'endpointUrl', {
+            exportName: props.serverEnvMap.APP_NAME_PREFIX + 'EndpointUrl',
+            description: 'The endpoint of where the Lambda service is bound',
+            value: `${api.url}`
+        });
+
         new cdk.CfnOutput(this, 'restApiId', {
             exportName: props.serverEnvMap.APP_NAME_PREFIX + 'RestApiId',
+            description: 'The CloudFront proxy rule needs a domain name to route /api requests. Using this api.domainName would be better but does not seem to work. This is a workaround for getting the domain name of the Lambda endpoint.',
             value: api.restApiId
+        });
+
+        new cdk.CfnOutput(this, 'restApiUrl', {
+            exportName: props.serverEnvMap.APP_NAME_PREFIX + 'RestApiUrl',
+            description: 'The URL of where the REST API starts listening from this is the Lambda endpoint address plus /api so that CloudFront can define a proxy path to the api. This url will respond with a HealthCheck OK response. All other REST calls are below this URL path.',
+            value: `${api.url}api`
         });
     }
 }

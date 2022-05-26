@@ -51,13 +51,6 @@ export class KimsClientStack extends Stack {
 
 
         // Find out what the APIGateway address is of the Lambda function
-        // const api = cdk.aws_apigateway.RestApi.fromRestApiAttributes(this, 'RestApi', {
-        //
-        // })
-
-        //const apiDomainName = props.serverEnvMap.API_DOMAIN_PREFIX + '.' + props.serverEnvMap.BASE_DOMAIN_NAME;
-        //const apiDomainName = 'i8o79qtdj4.execute-api.ap-southeast-2.amazonaws.com';
-
         // Lookup the output value from the KimsServerStack and use that as part of a naming pattern
         const restApiId = cdk.Fn.importValue(props.serverEnvMap.APP_NAME_PREFIX + 'RestApiId');
         // We could do a lookup of the resource and ask it for the domain name, but the name we want follows a standard

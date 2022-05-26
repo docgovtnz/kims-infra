@@ -40,6 +40,24 @@ For example;
 export ENV_HOME=/Users/richardperfect/Dev/kims-infra/env
 export ENV_NAME=dev
 
+## Environment setup
+
+To create a KIMS environment from an untouched AWS account, the following things need to be created manually before the 
+CDK scripts can be created. These manual setup steps are only needs once at the start of creating the environment and
+once completed all further deployments of each release can be handled by the CDK scripts.
+
+ - Database
+ - Database Secret
+ - S3 Meta Bucket
+ - S3 Release bucket
+ - ECR Container Registry 
+ - Cognito Pool
+ - Azure AD federation with Cognito
+ - Route53 Hosted Zone
+ - SSL Certificate/s
+
+
+
 
 ## Deploying
 
@@ -47,10 +65,14 @@ To deploy any release of Kims to any environment do the following steps
 
 1. Login to AWS and setup your AWS credentials as outlined above
 2. Set the ENV_HOME and ENV_NAME variables to point to the application environment you want to work with (see above)
-3. Run the CDK deployment with
+3. Run the CDK deployment with the following
 
 ```shell
+# Server
 cdk deploy KimsServerStack
+
+# Client
+./copy-client-json.sh
 cdk deploy KimsClientStack
 ```
 
@@ -62,3 +84,8 @@ TIPS
  - Sometimes it's better to "Delete" the Cloudformation stack first and then deploy the new one. It can be slow and 
  error prone to do an "update" but is better at doing a "delete" followed by the "create".
 
+ - Logging there's a new half decent AWS CLI logging command that will download and follow Cloudwatch log streams.
+
+```shell
+aws logs tail /aws/lambda/dev-kims-docker-function --follow
+```
