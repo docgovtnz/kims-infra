@@ -1,7 +1,0 @@
-This environment is not ready yet there are a number of things to do;
-
-- setup the database
-- setup a secret with the database password
-- setup the meta-data bucket
-- setup certificates
-- change/check all variables in this folder

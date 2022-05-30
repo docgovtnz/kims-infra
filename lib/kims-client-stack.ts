@@ -64,7 +64,7 @@ export class KimsClientStack extends Stack {
         });
 
         const apiCachePolicy = new cdk.aws_cloudfront.CachePolicy(this, 'ApiCachePolicy', {
-            cachePolicyName: props.clientEnvMap.APP_DOMAIN_PREFIX + '-api-cache-policy',
+            cachePolicyName: props.serverEnvMap.APP_NAME_PREFIX + '-api-cache-policy',
             headerBehavior: CacheHeaderBehavior.allowList('Authorization'),
             queryStringBehavior: CacheQueryStringBehavior.all(),
             enableAcceptEncodingBrotli: true,

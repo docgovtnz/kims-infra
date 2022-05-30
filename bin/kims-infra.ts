@@ -28,6 +28,9 @@ export interface ServerEnvMap {
     DATABASE_PASSWORD: string;
     BASE_DOMAIN_NAME: string;
     HOSTED_ZONE_ID: string;
+    VPC_ID: string;
+    SUBNET_ID_LIST: string;
+    SECURITY_GROUP_LIST: string;
     API_DOMAIN_PREFIX: string;
     API_CERTIFICATE_ARN: string;
     META_BUCKET_NAME: string;
@@ -73,6 +76,5 @@ const loadMyStackProps = (): MyStackProps  => {
 const myStackProps = loadMyStackProps();
 const app = new cdk.App();
 
-new KimsServerStack(app, 'KimsServerStack', myStackProps);
-new KimsClientStack(app, 'KimsClientStack', myStackProps);
-
+new KimsServerStack(app, process.env.ENV_NAME + '-kims-server-stack', myStackProps);
+new KimsClientStack(app, process.env.ENV_NAME + '-kims-client-stack', myStackProps);

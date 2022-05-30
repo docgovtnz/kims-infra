@@ -3,6 +3,7 @@ import {Duration, Stack} from 'aws-cdk-lib';
 import {Construct} from 'constructs';
 import {Effect} from 'aws-cdk-lib/aws-iam';
 import {MyStackProps} from '../bin/kims-infra';
+import {ISecurityGroup, ISubnet} from 'aws-cdk-lib/aws-ec2';
 
 export class KimsServerStack extends Stack {
     constructor(scope: Construct, id: string, props: MyStackProps) {
@@ -12,18 +13,20 @@ export class KimsServerStack extends Stack {
 
         const vpc = cdk.aws_ec2.Vpc.fromLookup(this, 'VPC', {
             region: props.awsEnvMap.AWS_REGION,
-            vpcId: 'vpc-a317a5c7'
+            vpcId: props.serverEnvMap.VPC_ID,
         });
 
-        const subnets = [
-            cdk.aws_ec2.Subnet.fromSubnetId(this, 'subnet-ce5de597', 'subnet-ce5de597'),
-            cdk.aws_ec2.Subnet.fromSubnetId(this, 'subnet-704c2f06', 'subnet-704c2f06'),
-            cdk.aws_ec2.Subnet.fromSubnetId(this, 'subnet-a32f56c7', 'subnet-a32f56c7'),
-        ];
+        const subnets: ISubnet[] = [];
+        const subnetIdList = props.serverEnvMap.SUBNET_ID_LIST.split(',');
+        for(const nextSubnetId of subnetIdList) {
+            subnets.push(cdk.aws_ec2.Subnet.fromSubnetId(this, nextSubnetId, nextSubnetId));
+        }
 
-        const securityGroups = [
-            cdk.aws_ec2.SecurityGroup.fromLookupById(this, 'sg-70a03a17', 'sg-70a03a17')
-        ]
+        const securityGroups: ISecurityGroup[] = [];
+        const securityGroupList = props.serverEnvMap.SECURITY_GROUP_LIST.split(',');
+        for(const nextSecurityGroupId of securityGroupList) {
+            securityGroups.push(cdk.aws_ec2.SecurityGroup.fromLookupById(this, nextSecurityGroupId, nextSecurityGroupId));
+        }
 
         const repo = cdk.aws_ecr.Repository.fromRepositoryName(this, props.serverEnvMap.ECR_REPOSITORY_NAME, props.serverEnvMap.ECR_REPOSITORY_NAME);
         const dockerImageFunction = new cdk.aws_lambda.DockerImageFunction(this, lambdaFunctionName, {
