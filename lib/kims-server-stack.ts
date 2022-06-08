@@ -4,6 +4,7 @@ import {Construct} from 'constructs';
 import {Effect} from 'aws-cdk-lib/aws-iam';
 import {MyStackProps} from '../bin/kims-infra';
 import {ISecurityGroup, ISubnet} from 'aws-cdk-lib/aws-ec2';
+import {DockerImageFunctionProps} from 'aws-cdk-lib/aws-lambda';
 
 export class KimsServerStack extends Stack {
     constructor(scope: Construct, id: string, props: MyStackProps) {
@@ -11,37 +12,69 @@ export class KimsServerStack extends Stack {
 
         const lambdaFunctionName = props.serverEnvMap.APP_NAME_PREFIX + '-docker-function';
 
-        const vpc = cdk.aws_ec2.Vpc.fromLookup(this, 'VPC', {
-            region: props.awsEnvMap.AWS_REGION,
-            vpcId: props.serverEnvMap.VPC_ID,
-        });
 
-        const subnets: ISubnet[] = [];
-        const subnetIdList = props.serverEnvMap.SUBNET_ID_LIST.split(',');
-        for(const nextSubnetId of subnetIdList) {
-            subnets.push(cdk.aws_ec2.Subnet.fromSubnetId(this, nextSubnetId, nextSubnetId));
-        }
+        // // Database Cluster
+        // const databaseCluster = cdk.aws_rds.DatabaseCluster.fromDatabaseClusterAttributes(this, 'DatabaseCluster', {
+        //     engine: cdk.aws_rds.DatabaseClusterEngine.AURORA_POSTGRESQL,
+        //     clusterIdentifier: 'dev-kims-db',
+        //     port: 5432
+        // });
+        //
+        // // Database Secret
+        // const databaseSecret = cdk.aws_secretsmanager.Secret.fromSecretCompleteArn(this, 'DatabaseSecret', props.serverEnvMap.DATABASE_PASSWORD);
+        //
+        // // Database Proxy
+        // const databaseProxy = new cdk.aws_rds.DatabaseProxy(this, 'DatabaseProxy', {
+        //     proxyTarget: ProxyTarget.fromCluster(databaseCluster),
+        //     secrets: [databaseSecret],
+        //     vpc: vpc
+        // });
 
-        const securityGroups: ISecurityGroup[] = [];
-        const securityGroupList = props.serverEnvMap.SECURITY_GROUP_LIST.split(',');
-        for(const nextSecurityGroupId of securityGroupList) {
-            securityGroups.push(cdk.aws_ec2.SecurityGroup.fromLookupById(this, nextSecurityGroupId, nextSecurityGroupId));
-        }
-
+        // Docker Image Function (Lambda)
         const repo = cdk.aws_ecr.Repository.fromRepositoryName(this, props.serverEnvMap.ECR_REPOSITORY_NAME, props.serverEnvMap.ECR_REPOSITORY_NAME);
-        const dockerImageFunction = new cdk.aws_lambda.DockerImageFunction(this, lambdaFunctionName, {
+
+        const dockerImageFunctionProps: any = {
             environment: props.serverEnvMap as any,
             code: cdk.aws_lambda.DockerImageCode.fromEcr(repo, {
                 tag: props.serverEnvMap.SERVER_RELEASE
             }),
             timeout: Duration.seconds(30),
             functionName: lambdaFunctionName,
-            securityGroups: securityGroups,
-            vpc: vpc,
-            vpcSubnets: {
+            memorySize: 256,
+            // securityGroups: securityGroups,
+            // vpc: vpc,
+            // vpcSubnets: {
+            //     subnets: subnets
+            // }
+        }
+
+        if(props.serverEnvMap.VPC_ID) {
+            const vpc = cdk.aws_ec2.Vpc.fromLookup(this, 'VPC', {
+                region: props.awsEnvMap.AWS_REGION,
+                vpcId: props.serverEnvMap.VPC_ID,
+            });
+
+            const subnets: ISubnet[] = [];
+            const subnetIdList = props.serverEnvMap.SUBNET_ID_LIST.split(',');
+            for(const nextSubnetId of subnetIdList) {
+                subnets.push(cdk.aws_ec2.Subnet.fromSubnetId(this, nextSubnetId, nextSubnetId));
+            }
+
+            const securityGroups: ISecurityGroup[] = [];
+            const securityGroupList = props.serverEnvMap.SECURITY_GROUP_LIST.split(',');
+            for(const nextSecurityGroupId of securityGroupList) {
+                securityGroups.push(cdk.aws_ec2.SecurityGroup.fromLookupById(this, nextSecurityGroupId, nextSecurityGroupId));
+            }
+
+            dockerImageFunctionProps.securityGroups = securityGroups;
+            dockerImageFunctionProps.vpc = vpc;
+            dockerImageFunctionProps.vpcSubnets = {
                 subnets: subnets
             }
-        });
+        }
+
+        const dockerImageFunction = new cdk.aws_lambda.DockerImageFunction(this, lambdaFunctionName, dockerImageFunctionProps);
+
 
         if(dockerImageFunction.role) {
             const dbPassword = props.serverEnvMap.DATABASE_PASSWORD;

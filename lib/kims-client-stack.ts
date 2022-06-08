@@ -1,5 +1,5 @@
 import * as cdk from 'aws-cdk-lib';
-import {Stack} from 'aws-cdk-lib';
+import {Duration, Stack} from 'aws-cdk-lib';
 import {Construct} from 'constructs';
 import {MyStackProps} from '../bin/kims-infra';
 import {
@@ -67,6 +67,9 @@ export class KimsClientStack extends Stack {
             cachePolicyName: props.serverEnvMap.APP_NAME_PREFIX + '-api-cache-policy',
             headerBehavior: CacheHeaderBehavior.allowList('Authorization'),
             queryStringBehavior: CacheQueryStringBehavior.all(),
+            minTtl: Duration.seconds(0),
+            maxTtl: Duration.seconds(1),
+            defaultTtl: Duration.seconds(0),
             enableAcceptEncodingBrotli: true,
             enableAcceptEncodingGzip: true
         });
