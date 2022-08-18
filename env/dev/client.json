@@ -1,5 +1,5 @@
 {
-  "CLIENT_RELEASE": "0.0.52",
+  "CLIENT_RELEASE": "0.0.53",
   "PRODUCTION_MODE": true,
   "API_URL": "api",
   "CLOUD_FRONT_CERTIFICATE": "arn:aws:acm:us-east-1:448611289225:certificate/00dd5f3e-1259-4299-983e-cd03c82deace",
