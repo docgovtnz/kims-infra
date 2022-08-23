@@ -1,0 +1,62 @@
+env:
+  AWS_ACCOUNT_ID: 252379044400
+name: kims-deploy
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - build
+
+jobs:
+  build-publish-to-s3:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '16.x'
+
+      - name: debug
+        working-directory: .
+        run: ls -al
+
+      - name: npmrc
+        working-directory: '.'
+        run: |
+          echo "@perfect-stack:registry=https://npm.pkg.github.com" >> .npmrc
+          echo "//npm.pkg.github.com/:_authToken=${{secrets.GITHUB_TOKEN}}" >> .npmrc
+
+      - name: checknpmrc
+        working-directory: '.'
+        run: cat .npmrc | rev
+
+      - name: npm ci
+        working-directory: '.'
+        run: npm ci --legacy-peer-deps #--userconfig=./.npmrc
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          
+      - name: npm run build
+        working-directory: '.'
+        run: npm run build
+      - name: get version
+        working-directory: output
+        run: |
+          export NPM_PKG_VERSION=$(npm pkg get version | sed 's/"//g')
+          echo "TAG_NAME=demo-aws-client-$NPM_PKG_VERSION" >> $GITHUB_ENV
+      - name: publish aws
+        working-directory: output
+        run: |
+          export NPM_PKG_VERSION=$(npm pkg get version | sed 's/"//g')
+          aws s3 cp --recursive output/dist/kims-client/ s3://kims-client/$NPM_PKG_VERSION-${{env.ENV}}
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: ap-southeast-2
+          AWS_DEFAULT_OUTPUT: json
+      - name: debug
+        working-directory: output/dist/kims-client
+        run: ls -al
