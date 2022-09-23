@@ -1,15 +1,35 @@
-env:
-  AWS_ACCOUNT_ID: 252379044400
-name: kims-deploy
+name: deploy
 on:
+  workflow_call:
+    inputs:
+      environment:
+        description: 'Environment to deploy to'
+        required: true
+        default: dev
+        type: string
+    secrets:
+      AWS_ACCESS_KEY_ID:
+        required: true
+      AWS_SECRET_ACCESS_KEY:
+        required: true
+
   workflow_dispatch:
-  push:
-    branches:
-      - build
+    inputs:
+      environment:
+        description: 'Environment to deploy to'
+        required: true
+        type: choice
+        options:
+          - sandpit
+          - dev
+          - uat
+          - test
+          - prod
 
 jobs:
-  build-publish-to-s3:
+  deploy-stack:
     runs-on: ubuntu-latest
+    environment: ${{inputs.environment}}
     steps:
       - uses: actions/checkout@v3
         with:
@@ -18,45 +38,33 @@ jobs:
         with:
           node-version: '16.x'
 
-      - name: debug
-        working-directory: .
-        run: ls -al
-
-      - name: npmrc
-        working-directory: '.'
-        run: |
-          echo "@perfect-stack:registry=https://npm.pkg.github.com" >> .npmrc
-          echo "//npm.pkg.github.com/:_authToken=${{secrets.GITHUB_TOKEN}}" >> .npmrc
-
-      - name: checknpmrc
-        working-directory: '.'
-        run: cat .npmrc | rev
-
       - name: npm ci
         working-directory: '.'
-        run: npm ci --legacy-peer-deps #--userconfig=./.npmrc
+        run: npm ci #--userconfig=./.npmrc
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          
+
       - name: npm run build
         working-directory: '.'
         run: npm run build
-      - name: get version
-        working-directory: output
-        run: |
-          export NPM_PKG_VERSION=$(npm pkg get version | sed 's/"//g')
-          echo "TAG_NAME=demo-aws-client-$NPM_PKG_VERSION" >> $GITHUB_ENV
-      - name: publish aws
-        working-directory: output
-        run: |
-          export NPM_PKG_VERSION=$(npm pkg get version | sed 's/"//g')
-          aws s3 cp --recursive output/dist/kims-client/ s3://kims-client/$NPM_PKG_VERSION-${{env.ENV}}
+
+      - name: install cdk
+        working-directory: '.'
+        run: | 
+          npm i -g
+          source ~/.bashrc 
+
+      - name: cdk deploy
+        uses: youyo/aws-cdk-github-actions@v2
+        with:
+          cdk_subcommand: 'synth'
+          cdk_args: '--debug'
+          working_dir: '.'
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          ENV_HOME: 'env'
+          ENV_NAME: ${{inputs.environment}}
           AWS_DEFAULT_REGION: ap-southeast-2
           AWS_DEFAULT_OUTPUT: json
-      - name: debug
-        working-directory: output/dist/kims-client
-        run: ls -al

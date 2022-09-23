@@ -1,0 +1,12 @@
+name: CI-dev
+on:
+  push:
+    paths:
+      - 'env/dev/*'
+
+jobs:
+  CI-dev:
+    uses: ./.github/workflows/deploy.yml
+    with:
+      environment: dev
+    secrets: inherit
