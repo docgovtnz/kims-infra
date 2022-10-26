@@ -36,7 +36,7 @@ export class KimsServerStack extends Stack {
         const dockerImageFunctionProps: any = {
             environment: props.serverEnvMap as any,
             code: cdk.aws_lambda.DockerImageCode.fromEcr(repo, {
-                tag: props.serverEnvMap.SERVER_RELEASE
+                tagOrDigest: props.serverEnvMap.SERVER_RELEASE
             }),
             timeout: Duration.seconds(30),
             functionName: lambdaFunctionName,
