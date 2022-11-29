@@ -1,0 +1,57 @@
+{
+  "name": "WeightActivity",
+  "pluralName": "Weights",
+  "icon": "scale",
+  "type": "Database",
+  "rootNode": false,
+  "timestamps": true,
+  "attributes": [
+    {
+      "name": "id",
+      "label": "Id",
+      "description": "",
+      "unitOfMeasure": "",
+      "scale": "",
+      "type": "Identifier",
+      "visibility": "Visible",
+      "comparisonField": "",
+      "comparisonOperator": "",
+      "relationshipTarget": "",
+      "typeaheadSearch": [],
+      "rules": []
+    },
+    {
+      "name": "weight",
+      "label": "Weight",
+      "description": "Measured in (g)",
+      "unitOfMeasure": "g",
+      "scale": "0",
+      "type": "Double",
+      "visibility": "Required",
+      "comparisonField": "",
+      "comparisonOperator": "",
+      "relationshipTarget": "",
+      "typeaheadSearch": [],
+      "rules": [
+        {
+          "type": "Range",
+          "config": "0"
+        }
+      ]
+    },
+    {
+      "name": "activity_type",
+      "label": "Activity type",
+      "description": "Type of activity",
+      "unitOfMeasure": "",
+      "scale": "",
+      "type": "Text",
+      "visibility": "Visible",
+      "comparisonField": "",
+      "comparisonOperator": "",
+      "relationshipTarget": "",
+      "typeaheadSearch": [],
+      "rules": []
+    }
+  ]
+}

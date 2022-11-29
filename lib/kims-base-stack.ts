@@ -14,9 +14,14 @@ export class KimsBaseStack extends Stack {
     constructor(scope: Construct, id: string, props: MyStackProps) {
         super(scope, id, props);
 
+        const ENV_NAME = process.env.ENV_NAME;
+        if(!ENV_NAME) {
+            throw new Error('ENV_NAME is not defined');
+        }
+
         // Create username and password secret for DB Cluster
         const secret = new rds.DatabaseSecret(this, 'AuroraSecret', {
-            secretName: 'prod/kims/database/password',
+            secretName: `${ENV_NAME}/kims/database/password`,
             username: 'clusteradmin',
         });
 
@@ -33,9 +38,9 @@ export class KimsBaseStack extends Stack {
         }
 
         const subnetGroup = new rds.SubnetGroup(this, 'SubnetGroup', {
-            description: 'Subnet group for prod-kims-subnet-group',
+            description: `Subnet group for ${ENV_NAME}-kims-subnet-group`,
             vpc: vpc,
-            subnetGroupName: 'prod-kims-subnet-group',
+            subnetGroupName: `${ENV_NAME}-kims-subnet-group`,
             vpcSubnets: {
                 subnets: subnets,
             },
@@ -49,14 +54,13 @@ export class KimsBaseStack extends Stack {
 
         // Create the serverless cluster, provide all values needed to customise the database.
         const cluster = new rds.ServerlessCluster(this, 'AuroraCluster', {
-            clusterIdentifier: 'prod-kims-serverless-cluster',
+            clusterIdentifier: `${ENV_NAME}-kims-serverless-cluster`,
             engine: rds.DatabaseClusterEngine.AURORA_POSTGRESQL,
             vpc: vpc,
             subnetGroup: subnetGroup,
             securityGroups: securityGroups,
-//            credentials: { username: 'clusteradmin', secret: secret },
             credentials: rds.Credentials.fromSecret(secret),
-            defaultDatabaseName: 'prod_kims_db',
+            defaultDatabaseName: `${ENV_NAME}_kims_db`,
             parameterGroup: rds.ParameterGroup.fromParameterGroupName(this, 'ParameterGroup', 'default.aurora-postgresql10'),
             scaling: {
                 minCapacity: AuroraCapacityUnit.ACU_2,
@@ -66,29 +70,30 @@ export class KimsBaseStack extends Stack {
         });
 
         const metaBucket = new s3.Bucket(this, 'MetaBucket', {
-            bucketName: 'prod-kims-meta',
+            bucketName: `${ENV_NAME}-kims-meta`,
             publicReadAccess: false,
             removalPolicy: RemovalPolicy.DESTROY,
         });
 
         const releaseBucket = new s3.Bucket(this, 'ReleaseBucket', {
-            bucketName: 'prod-kims-release',
+            bucketName: `${ENV_NAME}-kims-release`,
             publicReadAccess: false,
             removalPolicy: RemovalPolicy.DESTROY,
         });
 
         const repository = new ecr.Repository(this, 'Repository', {
-            repositoryName: 'prod-kims-server',
+            repositoryName: `${ENV_NAME}-kims-server`,
             removalPolicy: RemovalPolicy.DESTROY,
         });
 
         const userPool = new cognito.UserPool(this, 'UserPool', {
-            userPoolName: 'prod-kims-user-pool',
+            userPoolName: `${ENV_NAME}-kims-user-pool`,
             removalPolicy: RemovalPolicy.DESTROY
         });
 
+        const webAppDomainName = props.clientEnvMap.APP_DOMAIN_PREFIX + '.' + props.serverEnvMap.BASE_DOMAIN_NAME;
         const appClient = userPool.addClient('AppClient', {
-            userPoolClientName: 'prod-kims-appclient',
+            userPoolClientName: `${ENV_NAME}-kims-appclient`,
             accessTokenValidity: Duration.minutes(600),
             idTokenValidity: Duration.minutes(600),
             authFlows: {
@@ -100,7 +105,7 @@ export class KimsBaseStack extends Stack {
                     implicitCodeGrant: true
                 },
                 callbackUrls: [
-                    'https://app.prod.kims.doc.govt.nz/login-callback'
+                    `https://${webAppDomainName}/login-callback`
                 ]
             }
         })

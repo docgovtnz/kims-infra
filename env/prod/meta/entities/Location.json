@@ -1,0 +1,185 @@
+{
+  "name": "Location",
+  "pluralName": "Locations",
+  "icon": "",
+  "type": "Database",
+  "rootNode": true,
+  "timestamps": true,
+  "attributes": [
+    {
+      "name": "id",
+      "label": "Id",
+      "description": "",
+      "unitOfMeasure": "",
+      "scale": "",
+      "type": "Identifier",
+      "visibility": "Hidden",
+      "comparisonField": "",
+      "comparisonOperator": "",
+      "relationshipTarget": "",
+      "typeaheadSearch": [],
+      "rules": []
+    },
+    {
+      "name": "name",
+      "label": "Name",
+      "description": "Location name",
+      "unitOfMeasure": "",
+      "scale": "",
+      "type": "Text",
+      "visibility": "Hidden",
+      "comparisonField": "",
+      "comparisonOperator": "StartsWith",
+      "relationshipTarget": "",
+      "typeaheadSearch": [],
+      "rules": []
+    },
+    {
+      "name": "location_type",
+      "label": "Location type",
+      "description": "Type of location",
+      "unitOfMeasure": "",
+      "scale": "",
+      "type": "ManyToOne",
+      "visibility": "Required",
+      "comparisonField": "",
+      "comparisonOperator": "Equals",
+      "relationshipTarget": "LocationType",
+      "typeaheadSearch": [
+        "name"
+      ],
+      "rules": [
+        {
+          "type": "Required",
+          "config": ""
+        }
+      ]
+    },
+    {
+      "name": "description",
+      "label": "Description",
+      "description": "Description of the location",
+      "unitOfMeasure": "",
+      "scale": "",
+      "type": "Html",
+      "visibility": "Visible",
+      "comparisonField": "",
+      "comparisonOperator": "",
+      "relationshipTarget": "",
+      "typeaheadSearch": [],
+      "rules": []
+    },
+    {
+      "name": "easting",
+      "label": "Easting",
+      "description": "Grid coordinate Easting using NZTM",
+      "unitOfMeasure": "",
+      "scale": "0",
+      "type": "Double",
+      "visibility": "Required",
+      "comparisonField": "",
+      "comparisonOperator": "",
+      "relationshipTarget": "",
+      "typeaheadSearch": [],
+      "rules": [
+        {
+          "type": "Range",
+          "config": "1090000,2090000"
+        },
+        {
+          "type": "Required",
+          "config": ""
+        }
+      ]
+    },
+    {
+      "name": "northing",
+      "label": "Northing",
+      "description": "Grid coordinate northing using NZTM",
+      "unitOfMeasure": "",
+      "scale": "0",
+      "type": "Double",
+      "visibility": "Required",
+      "comparisonField": "",
+      "comparisonOperator": "",
+      "relationshipTarget": "",
+      "typeaheadSearch": [],
+      "rules": [
+        {
+          "type": "Required",
+          "config": ""
+        },
+        {
+          "type": "Range",
+          "config": "4748000,6192000"
+        }
+      ]
+    },
+    {
+      "name": "location_name",
+      "label": "Location name",
+      "description": "Location name",
+      "unitOfMeasure": "",
+      "scale": "",
+      "type": "Text",
+      "visibility": "Required",
+      "comparisonField": "",
+      "comparisonOperator": "InsensitiveStartsWith",
+      "relationshipTarget": "",
+      "typeaheadSearch": [],
+      "rules": [
+        {
+          "type": "Required",
+          "config": ""
+        }
+      ]
+    },
+    {
+      "name": "altitude",
+      "label": "Altitude",
+      "description": "Altitude of the location",
+      "unitOfMeasure": "m",
+      "scale": "0",
+      "type": "Double",
+      "visibility": "Visible",
+      "comparisonField": "",
+      "comparisonOperator": "",
+      "relationshipTarget": "",
+      "typeaheadSearch": [],
+      "rules": [
+        {
+          "type": "Range",
+          "config": "0"
+        }
+      ]
+    },
+    {
+      "name": "lat",
+      "label": "lat",
+      "description": "Latitude in WGS84 coordinates",
+      "unitOfMeasure": "",
+      "scale": "5",
+      "type": "Double",
+      "visibility": "Visible",
+      "comparisonField": "",
+      "comparisonOperator": "",
+      "relationshipTarget": "",
+      "typeaheadSearch": [],
+      "rules": []
+    },
+    {
+      "name": "lng",
+      "label": "lng",
+      "description": "Longitude in WGS84 coordinates",
+      "unitOfMeasure": "",
+      "scale": "5",
+      "type": "Double",
+      "visibility": "Visible",
+      "comparisonField": "",
+      "comparisonOperator": "",
+      "relationshipTarget": "",
+      "typeaheadSearch": [],
+      "rules": []
+    }
+  ]
+}

@@ -1,0 +1,81 @@
+{
+  "name": "EventSearchCriteria",
+  "pluralName": "Events",
+  "icon": "search",
+  "type": "Criteria",
+  "rootNode": false,
+  "timestamps": false,
+  "attributes": [
+    {
+      "name": "date_from",
+      "label": "Date from",
+      "description": "Starting date used for search",
+      "unitOfMeasure": "",
+      "scale": "",
+      "type": "Date",
+      "visibility": "Visible",
+      "comparisonField": "date_time",
+      "comparisonOperator": "GreaterThanOrEqualTo",
+      "relationshipTarget": "",
+      "typeaheadSearch": [],
+      "rules": []
+    },
+    {
+      "name": "date_to",
+      "label": "Date to",
+      "description": "Ending date used for search",
+      "unitOfMeasure": "",
+      "scale": "",
+      "type": "Date",
+      "visibility": "Visible",
+      "comparisonField": "date_time",
+      "comparisonOperator": "LessThanOrEqualTo",
+      "relationshipTarget": "",
+      "typeaheadSearch": [],
+      "rules": []
+    },
+    {
+      "name": "event_type",
+      "label": "Event type",
+      "description": "Event type for search",
+      "unitOfMeasure": "",
+      "scale": "",
+      "type": "Enumeration",
+      "visibility": "Visible",
+      "comparisonField": "",
+      "comparisonOperator": "Equals",
+      "relationshipTarget": "",
+      "typeaheadSearch": [],
+      "rules": [],
+      "enumeration": [
+        "Capture",
+        "Sighting",
+        "Audio",
+        "Transmitter",
+        "Electronic"
+      ]
+    },
+    {
+      "name": "activity_type",
+      "label": "Activity type",
+      "description": "Activity type for search",
+      "unitOfMeasure": "",
+      "scale": "",
+      "type": "Enumeration",
+      "visibility": "Visible",
+      "comparisonField": "",
+      "comparisonOperator": "Equals",
+      "relationshipTarget": "",
+      "typeaheadSearch": [],
+      "rules": [],
+      "enumeration": [
+        "Health",
+        "Measurement",
+        "Weight",
+        "Banding",
+        "Microchip",
+        "Wing tag"
+      ]
+    }
+  ]
+}

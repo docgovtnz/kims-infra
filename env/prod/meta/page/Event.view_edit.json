@@ -1,0 +1,176 @@
+{
+  "name": "Event.view_edit",
+  "title": "Event View/Edit",
+  "type": "view_edit",
+  "layoutStyle": "Paris",
+  "templates": [
+    {
+      "cells": [
+        [
+          {
+            "width": "3",
+            "height": "1",
+            "attributeName": "event_type",
+            "component": "Select"
+          },
+          {
+            "width": "9",
+            "height": "1",
+            "attributeName": "date_time",
+            "component": "FlexibleDateTime",
+            "componentData": {
+              "secondaryAttributeName": "time_precision"
+            }
+          }
+        ],
+        [
+          {
+            "width": "12",
+            "height": "3",
+            "attributeName": "comments",
+            "component": "TextArea"
+          }
+        ]
+      ],
+      "metaEntityName": "Event",
+      "type": "form",
+      "binding": "event",
+      "templateHeading": "Event details"
+    },
+    {
+      "cells": [
+        [
+          {
+            "width": "12",
+            "height": "1",
+            "tool": {
+              "type": "ButtonTabs",
+              "containerStyles": "",
+              "styles": "btn btn-secondary",
+              "label": "Select how to capture location",
+              "templateIndex": 1,
+              "template1": "LocationCoordinates.tab",
+              "template2": "LocationFinder.tab",
+              "template3": "",
+              "template4": "",
+              "template5": "",
+              "template6": "",
+              "template7": ""
+            }
+          }
+        ]
+      ],
+      "metaEntityName": "Event",
+      "type": "form",
+      "templateHeading": "Location",
+      "binding": "event"
+    },
+    {
+      "cells": [
+        [
+          {
+            "width": "6",
+            "height": "1",
+            "attributeName": "bird"
+          },
+          {
+            "width": "3",
+            "height": "1",
+            "attributeName": "status"
+          }
+        ],
+        [
+          {
+            "width": "6",
+            "height": "1",
+            "attributeName": "species",
+            "component": "SelectTwo",
+            "componentData": {
+              "secondaryAttributeName": "form"
+            }
+          },
+          {
+            "width": "3",
+            "height": "1",
+            "attributeName": "sex"
+          },
+          {
+            "width": "3",
+            "height": "1",
+            "attributeName": "age_class"
+          }
+        ]
+      ],
+      "metaEntityName": "Event",
+      "type": "form",
+      "templateHeading": "Bird details",
+      "binding": "event"
+    },
+    {
+      "cells": [
+        [
+          {
+            "width": "12",
+            "height": "1",
+            "template": {
+              "binding": "observers",
+              "templateHeading": "",
+              "type": "table",
+              "metaEntityName": "EventObserver",
+              "orderByName": "UNKNOWN",
+              "orderByDir": "ASC",
+              "cells": [
+                [
+                  {
+                    "width": "1",
+                    "height": "1",
+                    "attributeName": "person"
+                  },
+                  {
+                    "width": "1",
+                    "height": "1",
+                    "attributeName": "role",
+                    "component": "Select"
+                  }
+                ]
+              ],
+              "locations": {},
+              "styles": "table-borderless",
+              "noItemsHtml": "<span class=\"text-secondary\"><i><b>No observers added</b> - You can add observers by editing this event</i></span>"
+            }
+          }
+        ]
+      ],
+      "metaEntityName": "Event",
+      "type": "form",
+      "templateHeading": "Observers",
+      "binding": "event"
+    },
+    {
+      "cells": [
+        [
+          {
+            "width": "12",
+            "height": "1",
+            "attributeName": "activities",
+            "noItemsHtml": "<span class=\"text-secondary\"><i><b>No activities added</b> - You can add activities by editing this event</i></span>"
+          }
+        ]
+      ],
+      "metaEntityName": "Event",
+      "type": "form",
+      "templateHeading": "Activities",
+      "binding": "event"
+    }
+  ],
+  "dataQueryList": [
+    {
+      "resultCardinality": "QueryOne",
+      "queryType": "Entity",
+      "queryName": "Event",
+      "fieldName": "id",
+      "parameter": "id",
+      "dataName": "event"
+    }
+  ]
+}

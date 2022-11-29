@@ -1,0 +1,54 @@
+{
+  "name": "PersonSearchCriteria",
+  "pluralName": "People",
+  "icon": "",
+  "type": "Criteria",
+  "rootNode": false,
+  "timestamps": true,
+  "attributes": [
+    {
+      "name": "name",
+      "label": "Name",
+      "description": "Omni search of given or family name",
+      "unitOfMeasure": "",
+      "scale": "",
+      "type": "Text",
+      "visibility": "Visible",
+      "comparisonField": "",
+      "comparisonOperator": "InsensitiveLike",
+      "relationshipTarget": "",
+      "typeaheadSearch": [],
+      "rules": []
+    },
+    {
+      "name": "organisation",
+      "label": "Organisation",
+      "description": "Person's organisation they belong to",
+      "unitOfMeasure": "",
+      "scale": "",
+      "type": "ManyToOne",
+      "visibility": "Visible",
+      "comparisonField": "",
+      "comparisonOperator": "Equals",
+      "relationshipTarget": "Organisation",
+      "typeaheadSearch": [
+        "name"
+      ],
+      "rules": []
+    },
+    {
+      "name": "email_address",
+      "label": "Email address",
+      "description": "Email address of the person",
+      "unitOfMeasure": "",
+      "scale": "",
+      "type": "Text",
+      "visibility": "Visible",
+      "comparisonField": "",
+      "comparisonOperator": "InsensitiveLike",
+      "relationshipTarget": "",
+      "typeaheadSearch": [],
+      "rules": []
+    }
+  ]
+}

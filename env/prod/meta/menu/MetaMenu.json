@@ -1,0 +1,141 @@
+{
+  "menuList": [
+    {
+      "label": "Bird",
+      "items": [
+        {
+          "label": "Bird",
+          "route": "/data/Bird/search",
+          "editable": true,
+          "roles": []
+        }
+      ]
+    },
+    {
+      "label": "Event",
+      "items": [
+        {
+          "label": "Event",
+          "route": "/data/Event/search",
+          "editable": true,
+          "roles": []
+        }
+      ]
+    },
+    {
+      "label": "Location",
+      "items": [
+        {
+          "label": "Location",
+          "route": "/data/Location/search",
+          "editable": true,
+          "roles": []
+        }
+      ]
+    },
+    {
+      "label": "People",
+      "items": [
+        {
+          "editable": true,
+          "roles": [],
+          "label": "People",
+          "route": "/data/Person/search"
+        }
+      ]
+    },
+    {
+      "label": "Project",
+      "items": [
+        {
+          "label": "Project",
+          "route": "/data/Project/search",
+          "editable": true,
+          "roles": []
+        }
+      ]
+    },
+    {
+      "label": "Admin",
+      "items": [
+        {
+          "editable": true,
+          "roles": [],
+          "label": "Activity Type",
+          "route": "/data/ActivityType/search_edit"
+        },
+        {
+          "editable": true,
+          "roles": [],
+          "label": "Location Type",
+          "route": "/data/LocationType/search_edit"
+        },
+        {
+          "editable": true,
+          "roles": [],
+          "label": "Observer Role",
+          "route": "/data/ObserverRole/search_edit"
+        },
+        {
+          "editable": true,
+          "roles": [],
+          "label": "Organisation",
+          "route": "/data/Organisation/search"
+        },
+        {
+          "editable": true,
+          "roles": [],
+          "label": "Project Status",
+          "route": "/data/ProjectStatus/search_edit"
+        },
+        {
+          "editable": true,
+          "roles": [],
+          "label": "Project Role",
+          "route": "/data/ProjectRole/search_edit"
+        },
+        {
+          "editable": true,
+          "roles": [],
+          "label": "Project Team Status",
+          "route": "/data/ProjectTeamStatus/search_edit"
+        },
+        {
+          "editable": true,
+          "roles": [],
+          "label": "Species",
+          "route": "/data/Species/search"
+        }
+      ]
+    },
+    {
+      "label": "Meta",
+      "items": [
+        {
+          "label": "Entity",
+          "route": "/meta/entity/search"
+        },
+        {
+          "label": "Menu",
+          "route": "/meta/menu/view"
+        },
+        {
+          "label": "Page",
+          "route": "/meta/page/search"
+        },
+        {
+          "editable": true,
+          "roles": [],
+          "label": "Role",
+          "route": "/meta/role/search"
+        },
+        {
+          "editable": true,
+          "roles": [],
+          "label": "Version",
+          "route": "/meta/version"
+        }
+      ]
+    }
+  ]
+}

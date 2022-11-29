@@ -1,0 +1,45 @@
+{
+  "name": "MeasurementActivity.view_edit",
+  "title": "Measurement",
+  "type": "view_edit",
+  "layoutStyle": "",
+  "dataQueryList": [],
+  "controllers": [],
+  "templates": [
+    {
+      "cells": [
+        [
+          {
+            "width": "4",
+            "height": "1",
+            "attributeName": "tarsus_length"
+          },
+          {
+            "width": "4",
+            "height": "1",
+            "attributeName": "tarsus_width"
+          },
+          {
+            "width": "4",
+            "height": "1",
+            "attributeName": "tarsus_depth"
+          }
+        ],
+        [
+          {
+            "width": "4",
+            "height": "1",
+            "attributeName": "bill_length"
+          },
+          {
+            "width": "4",
+            "height": "1",
+            "attributeName": "wing_length"
+          }
+        ]
+      ],
+      "metaEntityName": "MeasurementActivity",
+      "type": "form"
+    }
+  ]
+}

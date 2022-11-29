@@ -10,6 +10,7 @@ import {
     OriginSslPolicy,
     ViewerProtocolPolicy
 } from 'aws-cdk-lib/aws-cloudfront';
+import * as process from 'process';
 
 export class KimsClientStack extends Stack {
     constructor(scope: Construct, id: string, props: MyStackProps) {
@@ -21,7 +22,15 @@ export class KimsClientStack extends Stack {
 
         const webAppDomainName = props.clientEnvMap.APP_DOMAIN_PREFIX + '.' + props.serverEnvMap.BASE_DOMAIN_NAME;
 
-        const distribution = new cdk.aws_cloudfront.Distribution(this, props.serverEnvMap.APP_NAME_PREFIX + 'CloudFront', {
+        // Copy the client.json from the local folder into the bucket where CloudFront will source it from
+        const clientJsonDeployment = new cdk.aws_s3_deployment.BucketDeployment(this, 'ClientJson', {
+            sources: [cdk.aws_s3_deployment.Source.jsonData('client.json', props.clientEnvMap)],
+            destinationBucket: releaseBucket,
+            destinationKeyPrefix: `env/${process.env.ENV_NAME}`
+        });
+
+        // Declare the CloudFront distribution and link it to the resources it will host
+        const distribution = new cdk.aws_cloudfront.Distribution(this, props.serverEnvMap.APP_NAME_PREFIX + '-cloud-front', {
             defaultBehavior: {
                 origin: origin,
                 allowedMethods: cdk.aws_cloudfront.AllowedMethods.ALLOW_ALL,
@@ -60,6 +69,8 @@ export class KimsClientStack extends Stack {
         const apiHttpOrigin = new cdk.aws_cloudfront_origins.HttpOrigin(apiDomainName, {
             protocolPolicy: OriginProtocolPolicy.HTTPS_ONLY,
             originSslProtocols: [OriginSslPolicy.TLS_V1_2],
+            // This isn't anything to do with the prod environment. Lambda has it's own ideas about environments, but we
+            // don't use them and this is just needed here because every Lambda API endpoint is going to be a "prod" endpoint.
             originPath: '/prod'
         });
 

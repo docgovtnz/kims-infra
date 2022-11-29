@@ -1,0 +1,133 @@
+{
+  "name": "MeasurementActivity",
+  "pluralName": "Measurements",
+  "icon": "straighten",
+  "type": "Database",
+  "rootNode": false,
+  "timestamps": true,
+  "attributes": [
+    {
+      "name": "id",
+      "label": "Id",
+      "description": "",
+      "unitOfMeasure": "",
+      "scale": "",
+      "type": "Text",
+      "visibility": "Visible",
+      "comparisonField": "",
+      "comparisonOperator": "",
+      "relationshipTarget": "",
+      "typeaheadSearch": [],
+      "rules": []
+    },
+    {
+      "name": "bill_length",
+      "label": "Bill length",
+      "description": "Length of the bird's bill",
+      "unitOfMeasure": "mm",
+      "scale": "1",
+      "type": "Double",
+      "visibility": "Visible",
+      "comparisonField": "",
+      "comparisonOperator": "",
+      "relationshipTarget": "",
+      "typeaheadSearch": [],
+      "rules": [
+        {
+          "type": "Range",
+          "config": "0"
+        }
+      ]
+    },
+    {
+      "name": "tarsus_length",
+      "label": "Tarsus length",
+      "description": "Length of the bird's tarsus",
+      "unitOfMeasure": "mm",
+      "scale": "1",
+      "type": "Double",
+      "visibility": "Visible",
+      "comparisonField": "",
+      "comparisonOperator": "",
+      "relationshipTarget": "",
+      "typeaheadSearch": [],
+      "rules": [
+        {
+          "type": "Range",
+          "config": "0"
+        }
+      ]
+    },
+    {
+      "name": "tarsus_width",
+      "label": "Tarsus width",
+      "description": "Width of the bird's tarsus",
+      "unitOfMeasure": "mm",
+      "scale": "1",
+      "type": "Double",
+      "visibility": "Visible",
+      "comparisonField": "",
+      "comparisonOperator": "",
+      "relationshipTarget": "",
+      "typeaheadSearch": [],
+      "rules": [
+        {
+          "type": "Range",
+          "config": "0"
+        }
+      ]
+    },
+    {
+      "name": "tarsus_depth",
+      "label": "Tarsus depth",
+      "description": "Depth of the bird's tarsus",
+      "unitOfMeasure": "mm",
+      "scale": "1",
+      "type": "Double",
+      "visibility": "Visible",
+      "comparisonField": "",
+      "comparisonOperator": "",
+      "relationshipTarget": "",
+      "typeaheadSearch": [],
+      "rules": [
+        {
+          "type": "Range",
+          "config": "0"
+        }
+      ]
+    },
+    {
+      "name": "activity_type",
+      "label": "Activity type",
+      "description": "Activity type",
+      "unitOfMeasure": "",
+      "scale": "",
+      "type": "Text",
+      "visibility": "Visible",
+      "comparisonField": "",
+      "comparisonOperator": "",
+      "relationshipTarget": "",
+      "typeaheadSearch": [],
+      "rules": []
+    },
+    {
+      "name": "wing_length",
+      "label": "Wing Length",
+      "description": "The length",
+      "unitOfMeasure": "mm",
+      "scale": "0",
+      "type": "Double",
+      "visibility": "Visible",
+      "comparisonField": "",
+      "comparisonOperator": "",
+      "relationshipTarget": "",
+      "typeaheadSearch": [],
+      "rules": [
+        {
+          "type": "Range",
+          "config": "0,900"
+        }
+      ]
+    }
+  ]
+}

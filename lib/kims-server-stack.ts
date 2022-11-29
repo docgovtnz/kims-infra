@@ -4,14 +4,23 @@ import {Construct} from 'constructs';
 import {Effect} from 'aws-cdk-lib/aws-iam';
 import {MyStackProps} from '../bin/kims-infra';
 import {ISecurityGroup, ISubnet} from 'aws-cdk-lib/aws-ec2';
-import {DockerImageFunctionProps} from 'aws-cdk-lib/aws-lambda';
 
 export class KimsServerStack extends Stack {
     constructor(scope: Construct, id: string, props: MyStackProps) {
         super(scope, id, props);
 
-        const lambdaFunctionName = props.serverEnvMap.APP_NAME_PREFIX + '-docker-function';
+        // Only do this bit if the environment is prod, other environments have their meta files managed manually
+        if(process.env.ENV_NAME === 'prod') {
+            // Copy the meta files into the meta bucket
+            const metaBucket = cdk.aws_s3.Bucket.fromBucketName(this, 'MetaBucket', props.serverEnvMap.META_BUCKET_NAME);
+            const metaFilesDeployment = new cdk.aws_s3_deployment.BucketDeployment(this, 'MetaFiles', {
+                sources: [cdk.aws_s3_deployment.Source.asset(`env/${process.env.ENV_NAME}/meta`)],
+                destinationBucket: metaBucket,
+                destinationKeyPrefix: `meta`
+            });
+        }
 
+        const lambdaFunctionName = props.serverEnvMap.APP_NAME_PREFIX + '-docker-function';
 
         // // Database Cluster
         // const databaseCluster = cdk.aws_rds.DatabaseCluster.fromDatabaseClusterAttributes(this, 'DatabaseCluster', {
@@ -126,7 +135,7 @@ export class KimsServerStack extends Stack {
 
         // Defines an API Gateway REST API resource backed by our lambda function and link it to both the
         // domain name and the certificate
-        const api = new cdk.aws_apigateway.LambdaRestApi(this, props.serverEnvMap.APP_NAME_PREFIX + 'Endpoint', {
+        const api = new cdk.aws_apigateway.LambdaRestApi(this, props.serverEnvMap.APP_NAME_PREFIX + '-endpoint', {
             handler: dockerImageFunction,
 
             // domainName: {

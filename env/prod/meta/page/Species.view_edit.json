@@ -1,0 +1,58 @@
+{
+  "name": "Species.view_edit",
+  "title": "Species View/Edit",
+  "type": "view_edit",
+  "layoutStyle": "NewYork",
+  "dataQueryList": [
+    {
+      "dataName": "species",
+      "resultCardinality": "QueryOne",
+      "queryType": "Entity",
+      "queryName": "Species",
+      "fieldName": "id",
+      "parameter": "id"
+    }
+  ],
+  "controllers": [],
+  "templates": [
+    {
+      "cells": [
+        [
+          {
+            "width": "3",
+            "height": "1",
+            "attributeName": "name"
+          },
+          {
+            "width": "3",
+            "height": "1",
+            "attributeName": "scientific_name"
+          },
+          {
+            "width": "3",
+            "height": "1",
+            "attributeName": "maori_name"
+          },
+          {
+            "width": "3",
+            "height": "1"
+          }
+        ],
+        [
+          {
+            "width": "6",
+            "height": "1",
+            "attributeName": "form"
+          },
+          {
+            "width": "6",
+            "height": "1"
+          }
+        ]
+      ],
+      "metaEntityName": "Species",
+      "type": "form",
+      "binding": "species"
+    }
+  ]
+}

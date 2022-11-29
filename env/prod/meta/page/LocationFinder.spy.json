@@ -1,0 +1,33 @@
+{
+  "name": "LocationFinder.spy",
+  "title": "",
+  "type": "view_edit",
+  "layoutStyle": "NewYork",
+  "templates": [
+    {
+      "cells": [
+        [
+          {
+            "width": "4",
+            "height": "1",
+            "attributeName": "easting"
+          },
+          {
+            "width": "4",
+            "height": "1",
+            "attributeName": "northing"
+          },
+          {
+            "width": "4",
+            "height": "1",
+            "attributeName": "altitude"
+          }
+        ]
+      ],
+      "metaEntityName": "Location",
+      "type": "form",
+      "binding": "location"
+    }
+  ],
+  "dataQueryList": []
+}

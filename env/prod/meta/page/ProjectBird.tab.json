@@ -1,0 +1,97 @@
+{
+  "name": "ProjectBird.tab",
+  "title": "Birds",
+  "type": "view_edit",
+  "layoutStyle": "Venice",
+  "dataQueryList": [],
+  "controllers": [],
+  "templates": [
+    {
+      "cells": [
+        [
+          {
+            "width": "1",
+            "height": "1",
+            "attributeName": "name"
+          },
+          {
+            "width": "1",
+            "height": "1",
+            "attributeName": "band"
+          },
+          {
+            "width": "1",
+            "height": "1",
+            "attributeName": "species"
+          },
+          {
+            "width": "1",
+            "height": "1",
+            "attributeName": "form"
+          },
+          {
+            "width": "1",
+            "height": "1",
+            "attributeName": "microchip"
+          },
+          {
+            "width": "1",
+            "height": "1",
+            "attributeName": "wing_tag"
+          },
+          {
+            "width": "1",
+            "height": "1",
+            "tool": {
+              "type": "TextTool",
+              "containerStyles": "",
+              "styles": "status-badge-${status}",
+              "label": "Status",
+              "modes": "",
+              "text": "${status}"
+            }
+          },
+          {
+            "width": "1",
+            "height": "1",
+            "tool": {
+              "type": "Icon",
+              "containerStyles": "",
+              "styles": "?mapSexSymbolToIconStyle(${sex})",
+              "label": "Sex",
+              "modes": "",
+              "iconName": "?mapSexSymbolToIcon(${sex})"
+            }
+          }
+        ],
+        [
+          {
+            "width": "6",
+            "height": "1"
+          },
+          {
+            "width": "6",
+            "height": "1"
+          }
+        ]
+      ],
+      "metaEntityName": "ProjectBirdSearchResult",
+      "type": "table",
+      "binding": "birdTabSearchResults",
+      "locations": {
+        "BottomMiddle": {
+          "type": "Paginate",
+          "containerStyles": "",
+          "styles": "",
+          "label": "",
+          "modes": "",
+          "channel": "birdTab",
+          "criteriaForm": "birdsCriteriaForm"
+        }
+      },
+      "noItemsHtml": "<div class=\"text-center\">No birds in this project</div> <div class=\"text-center text-secondary\">We couldn’t find any birds associated with this project yet</div>",
+      "navigation": "Enabled",
+      "route": "/data/Bird/view/${id}?backTo=Project"
+    }
+  ]
+}

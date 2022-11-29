@@ -1,0 +1,68 @@
+{
+  "name": "Administrator",
+  "group": "KIMS_Business_Admin,admins,ap-southeast-2_CIl5VvfWD_doc-azuread-sso,ap-southeast-2_wnejPAddx_doc-azuread-sso",
+  "inherits": "Manager",
+  "description": "<p>Controls admin menu, add projects, set project manager role, Add/Edit people (non-user)</p>",
+  "permissions": [
+    {
+      "action": "Edit",
+      "subject": "ActivityType"
+    },
+    {
+      "action": "Edit",
+      "subject": "LocationType"
+    },
+    {
+      "action": "Edit",
+      "subject": "ObserverRole"
+    },
+    {
+      "action": "Edit",
+      "subject": "ProjectRole"
+    },
+    {
+      "action": "Edit",
+      "subject": "ProjectStatus"
+    },
+    {
+      "action": "Edit",
+      "subject": "Species"
+    },
+    {
+      "action": "Edit",
+      "subject": "Organisation"
+    },
+    {
+      "action": "Edit",
+      "subject": "ProjectTeamStatus"
+    },
+    {
+      "action": "Delete",
+      "subject": "LocationType"
+    },
+    {
+      "action": "Delete",
+      "subject": "ObserverRole"
+    },
+    {
+      "action": "Delete",
+      "subject": "ProjectRole"
+    },
+    {
+      "action": "Delete",
+      "subject": "ProjectStatus"
+    },
+    {
+      "action": "Delete",
+      "subject": "ProjectTeamStatus"
+    },
+    {
+      "action": "Delete",
+      "subject": "ActivityType"
+    },
+    {
+      "action": "Menu",
+      "subject": "Admin"
+    }
+  ]
+}

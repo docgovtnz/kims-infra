@@ -1,0 +1,88 @@
+{
+  "name": "HealthActivity.view_edit",
+  "title": "Health",
+  "type": "view_edit",
+  "layoutStyle": "Paris",
+  "dataQueryList": [],
+  "controllers": [],
+  "templates": [
+    {
+      "cells": [
+        [
+          {
+            "width": "4",
+            "height": "1",
+            "attributeName": "condition",
+            "component": "Select"
+          }
+        ],
+        [
+          {
+            "width": "8",
+            "height": "1",
+            "tool": {
+              "type": "TextTool",
+              "containerStyles": "",
+              "styles": "mt-3",
+              "label": "",
+              "text": "What body checks did you perform?"
+            }
+          }
+        ],
+        [
+          {
+            "width": "4",
+            "height": "1",
+            "attributeName": "eyes_checked"
+          },
+          {
+            "width": "4",
+            "height": "1",
+            "attributeName": "legs_checked"
+          },
+          {
+            "width": "4",
+            "height": "1",
+            "attributeName": "gravid"
+          }
+        ],
+        [
+          {
+            "width": "8",
+            "height": "1",
+            "tool": {
+              "type": "TextTool",
+              "containerStyles": "",
+              "styles": "mt-3",
+              "label": "",
+              "text": "Were there any health issues found?"
+            }
+          }
+        ],
+        [
+          {
+            "width": "4",
+            "height": "1",
+            "attributeName": "whisker_fungus"
+          },
+          {
+            "width": "4",
+            "height": "1",
+            "attributeName": "lice"
+          }
+        ],
+        [
+          {
+            "width": "12",
+            "height": "3",
+            "attributeName": "health_notes",
+            "component": "TextArea"
+          }
+        ]
+      ],
+      "metaEntityName": "HealthActivity",
+      "type": "form",
+      "templateHeading": "Health"
+    }
+  ]
+}

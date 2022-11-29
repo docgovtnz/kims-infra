@@ -1,0 +1,33 @@
+{
+  "name": "LocationCoordinates.tab",
+  "title": "Easting/northing",
+  "type": "view_edit",
+  "layoutStyle": "NewYork",
+  "templates": [
+    {
+      "cells": [
+        [
+          {
+            "width": "3",
+            "height": "1",
+            "attributeName": "easting"
+          },
+          {
+            "width": "3",
+            "height": "1",
+            "attributeName": "northing"
+          },
+          {
+            "width": "3",
+            "height": "1",
+            "attributeName": "altitude"
+          }
+        ]
+      ],
+      "metaEntityName": "Event",
+      "type": "form",
+      "binding": "event"
+    }
+  ],
+  "dataQueryList": []
+}

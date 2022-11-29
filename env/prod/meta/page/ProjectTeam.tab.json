@@ -1,0 +1,68 @@
+{
+  "name": "ProjectTeam.tab",
+  "title": "Team",
+  "type": "view_edit",
+  "layoutStyle": "Venice",
+  "dataQueryList": [],
+  "controllers": [],
+  "templates": [
+    {
+      "cells": [
+        [
+          {
+            "width": "3",
+            "height": "1",
+            "attributeName": "name"
+          },
+          {
+            "width": "3",
+            "height": "1",
+            "attributeName": "email_address"
+          },
+          {
+            "width": "3",
+            "height": "1",
+            "attributeName": "role"
+          },
+          {
+            "width": "3",
+            "height": "1",
+            "attributeName": "team_status"
+          },
+          {
+            "width": "1",
+            "height": "1",
+            "attributeName": "last_sign_in"
+          }
+        ],
+        [
+          {
+            "width": "6",
+            "height": "1"
+          },
+          {
+            "width": "6",
+            "height": "1"
+          }
+        ]
+      ],
+      "metaEntityName": "ProjectTeamSearchResult",
+      "type": "table",
+      "binding": "teamSearchResults",
+      "noItemsHtml": "<div class=\"text-center\">No people assigned to this project</div> <div class=\"text-center text-secondary\">You can assign people by editing this project</div>",
+      "locations": {
+        "BottomMiddle": {
+          "type": "Paginate",
+          "channel": "teamTab",
+          "containerStyles": "",
+          "styles": "",
+          "label": "",
+          "modes": "",
+          "criteriaForm": "teamCriteriaForm"
+        }
+      },
+      "navigation": "Enabled",
+      "route": "/data/Person/view/${id}?backTo=Project"
+    }
+  ]
+}

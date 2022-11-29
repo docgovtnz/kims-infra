@@ -1,0 +1,163 @@
+{
+  "name": "Event.search",
+  "title": "$PageTitle",
+  "type": "search",
+  "layoutStyle": "",
+  "templates": [
+    {
+      "cells": [
+        [
+          {
+            "width": "3",
+            "height": "1",
+            "attributeName": "date_from"
+          },
+          {
+            "width": "3",
+            "height": "1",
+            "attributeName": "date_to"
+          },
+          {
+            "width": "3",
+            "height": "1",
+            "attributeName": "event_type",
+            "component": "Select"
+          },
+          {
+            "width": "3",
+            "height": "1",
+            "attributeName": "activity_type",
+            "component": "Select"
+          }
+        ]
+      ],
+      "metaEntityName": "EventSearchCriteria",
+      "type": "form"
+    },
+    {
+      "cells": [
+        [
+          {
+            "width": "1",
+            "height": "1",
+            "attributeName": "date_time",
+            "component": "DatePicker"
+          },
+          {
+            "width": "1",
+            "height": "1",
+            "attributeName": "bird"
+          },
+          {
+            "width": "1",
+            "height": "1",
+            "attributeName": "band"
+          },
+          {
+            "width": "1",
+            "height": "1",
+            "attributeName": "species"
+          },
+          {
+            "width": "1",
+            "height": "1",
+            "attributeName": "form"
+          },
+          {
+            "width": "1",
+            "height": "1",
+            "attributeName": "event_type"
+          },
+          {
+            "width": "1",
+            "height": "1",
+            "attributeName": "activities",
+            "component": "BadgeList"
+          }
+        ],
+        [
+          {
+            "width": "6",
+            "height": "1",
+            "template": {
+              "cells": [
+                [
+                  {
+                    "width": "3",
+                    "height": "1"
+                  },
+                  {
+                    "width": "3",
+                    "height": "1"
+                  },
+                  {
+                    "width": "3",
+                    "height": "1"
+                  },
+                  {
+                    "width": "3",
+                    "height": "1"
+                  }
+                ],
+                [
+                  {
+                    "width": "6",
+                    "height": "1"
+                  },
+                  {
+                    "width": "6",
+                    "height": "1"
+                  }
+                ]
+              ],
+              "type": "table"
+            }
+          },
+          {
+            "width": "6",
+            "height": "1",
+            "template": {
+              "cells": [
+                [
+                  {
+                    "width": "3",
+                    "height": "1"
+                  },
+                  {
+                    "width": "3",
+                    "height": "1"
+                  },
+                  {
+                    "width": "3",
+                    "height": "1"
+                  },
+                  {
+                    "width": "3",
+                    "height": "1"
+                  }
+                ],
+                [
+                  {
+                    "width": "6",
+                    "height": "1"
+                  },
+                  {
+                    "width": "6",
+                    "height": "1"
+                  }
+                ]
+              ],
+              "type": "table"
+            }
+          }
+        ]
+      ],
+      "metaEntityName": "EventSearchResult",
+      "type": "table",
+      "orderByName": "date_time",
+      "orderByDir": "DESC",
+      "customQuery": "EventSearchByCriteria"
+    }
+  ],
+  "dataQueryList": []
+}

@@ -1,0 +1,22 @@
+{
+  "name": "MicrochipActivity.view_edit",
+  "title": "Microchip",
+  "type": "view_edit",
+  "layoutStyle": "Paris",
+  "templates": [
+    {
+      "cells": [
+        [
+          {
+            "width": "6",
+            "height": "1",
+            "attributeName": "microchip"
+          }
+        ]
+      ],
+      "metaEntityName": "MicrochipActivity",
+      "type": "form"
+    }
+  ],
+  "dataQueryList": []
+}
