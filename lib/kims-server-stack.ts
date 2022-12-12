@@ -22,25 +22,8 @@ export class KimsServerStack extends Stack {
 
         const lambdaFunctionName = props.serverEnvMap.APP_NAME_PREFIX + '-docker-function';
 
-        // // Database Cluster
-        // const databaseCluster = cdk.aws_rds.DatabaseCluster.fromDatabaseClusterAttributes(this, 'DatabaseCluster', {
-        //     engine: cdk.aws_rds.DatabaseClusterEngine.AURORA_POSTGRESQL,
-        //     clusterIdentifier: 'dev-kims-db',
-        //     port: 5432
-        // });
-        //
-        // // Database Secret
-        // const databaseSecret = cdk.aws_secretsmanager.Secret.fromSecretCompleteArn(this, 'DatabaseSecret', props.serverEnvMap.DATABASE_PASSWORD);
-        //
-        // // Database Proxy
-        // const databaseProxy = new cdk.aws_rds.DatabaseProxy(this, 'DatabaseProxy', {
-        //     proxyTarget: ProxyTarget.fromCluster(databaseCluster),
-        //     secrets: [databaseSecret],
-        //     vpc: vpc
-        // });
-
         // Docker Image Function (Lambda)
-        const repo = cdk.aws_ecr.Repository.fromRepositoryName(this, props.serverEnvMap.ECR_REPOSITORY_NAME, props.serverEnvMap.ECR_REPOSITORY_NAME);
+        const repo = cdk.aws_ecr.Repository.fromRepositoryArn(this, 'EcrRepositoryArn', props.serverEnvMap.ECR_REPOSITORY_ARN);
 
         const dockerImageFunctionProps: any = {
             environment: props.serverEnvMap as any,
@@ -50,11 +33,6 @@ export class KimsServerStack extends Stack {
             timeout: Duration.seconds(30),
             functionName: lambdaFunctionName,
             memorySize: 256,
-            // securityGroups: securityGroups,
-            // vpc: vpc,
-            // vpcSubnets: {
-            //     subnets: subnets
-            // }
         }
 
         if(props.serverEnvMap.VPC_ID) {
@@ -83,7 +61,6 @@ export class KimsServerStack extends Stack {
         }
 
         const dockerImageFunction = new cdk.aws_lambda.DockerImageFunction(this, lambdaFunctionName, dockerImageFunctionProps);
-
 
         if(dockerImageFunction.role) {
             const dbPassword = props.serverEnvMap.DATABASE_PASSWORD;
@@ -121,37 +98,17 @@ export class KimsServerStack extends Stack {
             zoneName: props.serverEnvMap.BASE_DOMAIN_NAME
         });
 
-        //const apiDomainName = props.serverEnvMap.API_DOMAIN_PREFIX + '.' + props.serverEnvMap.BASE_DOMAIN_NAME;
-
-        // Create a certificate before we have the DNS records setup, but that's ok
-        // const apiCertificate = new cdk.aws_certificatemanager.Certificate(this, 'ApiCertificate', {
-        //     domainName: apiDomainName,
-        //     validation: cdk.aws_certificatemanager.CertificateValidation.fromDns(hostedZone)
-        // });
-
-        // OR: lookup the certificate from one that has already been created
-        // const apiCertificate = cdk.aws_certificatemanager.Certificate.fromCertificateArn(this, 'Certificate', props.serverEnvMap.API_CERTIFICATE_ARN);
-
-
         // Defines an API Gateway REST API resource backed by our lambda function and link it to both the
         // domain name and the certificate
         const api = new cdk.aws_apigateway.LambdaRestApi(this, props.serverEnvMap.APP_NAME_PREFIX + '-endpoint', {
             handler: dockerImageFunction,
-
-            // domainName: {
-            //     domainName: apiDomainName,
-            //     certificate: apiCertificate,
-            // }
+            deployOptions: {
+                throttlingRateLimit: Number(props.serverEnvMap.RATE_LIMIT_REQUESTS),
+                throttlingBurstLimit: Number(props.serverEnvMap.RATE_LIMIT_BURST)
+            }
         });
 
-        // The tricky bit is that this gets done last so that it can target the ApiGateway and also note that the
-        // recordName is the "short" part of the name and not the whole thing.
-        // const route53ARecord = new cdk.aws_route53.ARecord(this, 'Route53ARecord', {
-        //     zone: hostedZone,
-        //     recordName: props.serverEnvMap.API_DOMAIN_PREFIX,
-        //     target: cdk.aws_route53.RecordTarget.fromAlias(new cdk.aws_route53_targets.ApiGateway(api))
-        // });
-
+        // Output various URLs for testing and debugging since these have randomly assigned unique names
         new cdk.CfnOutput(this, 'endpointUrl', {
             exportName: props.serverEnvMap.APP_NAME_PREFIX + 'EndpointUrl',
             description: 'The endpoint of where the Lambda service is bound',

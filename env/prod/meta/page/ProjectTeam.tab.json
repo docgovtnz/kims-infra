@@ -62,7 +62,8 @@
         }
       },
       "navigation": "Enabled",
-      "route": "/data/Person/view/${id}?backTo=Project"
+      "route": "/data/Person/view/${id}?backTo=Project",
+      "styles": "container-table"
     }
   ]
 }

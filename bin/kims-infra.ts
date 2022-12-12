@@ -16,7 +16,7 @@ export interface ClientEnvMap {
     CLIENT_RELEASE: string;
     API_URL: string;
     CLOUD_FRONT_CERTIFICATE: string;
-    S3_RELEASE_BUCKET: string;
+    S3_RELEASE_BUCKET_ARN: string;
     APP_DOMAIN_PREFIX: string
 }
 
@@ -35,7 +35,10 @@ export interface ServerEnvMap {
     API_DOMAIN_PREFIX: string;
     API_CERTIFICATE_ARN: string;
     META_BUCKET_NAME: string;
-    ECR_REPOSITORY_NAME: string;
+    ECR_REPOSITORY_ARN: string;
+    // environment variables are always strings, these need to be converted into a number when used
+    RATE_LIMIT_REQUESTS: string;
+    RATE_LIMIT_BURST: string;
 }
 
 export interface MyStackProps extends cdk.StackProps {

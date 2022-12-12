@@ -2,7 +2,7 @@
   "name": "Organisation.view_edit",
   "title": "Organisation View/Edit",
   "type": "view_edit",
-  "layoutStyle": "NewYork",
+  "layoutStyle": "Paris",
   "dataQueryList": [
     {
       "dataName": "organisation",
@@ -27,7 +27,9 @@
       ],
       "metaEntityName": "Organisation",
       "type": "form",
-      "binding": "organisation"
+      "binding": "organisation",
+      "templateHeading": "Details",
+      "showSideHeadings": "Enabled"
     }
   ]
 }

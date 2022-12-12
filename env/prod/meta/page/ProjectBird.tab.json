@@ -91,7 +91,8 @@
       },
       "noItemsHtml": "<div class=\"text-center\">No birds in this project</div> <div class=\"text-center text-secondary\">We couldn’t find any birds associated with this project yet</div>",
       "navigation": "Enabled",
-      "route": "/data/Bird/view/${id}?backTo=Project"
+      "route": "/data/Bird/view/${id}?backTo=Project",
+      "styles": "container-table"
     }
   ]
 }
