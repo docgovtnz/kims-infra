@@ -1,6 +1,6 @@
 {
   "name": "Administrator",
-  "group": "KIMS_Business_Admin,admins,ap-southeast-2_CIl5VvfWD_doc-azuread-sso,ap-southeast-2_wnejPAddx_doc-azuread-sso",
+  "group": "KIMS_Business_Admin,admins,ap-southeast-2_CIl5VvfWD_doc-azuread-sso,ap-southeast-2_wnejPAddx_doc-azuread-sso,ap-southeast-2_2WjwhT27h_doc-azuread-sso",
   "inherits": "Manager",
   "description": "<p>Controls admin menu, add projects, set project manager role, Add/Edit people (non-user)</p>",
   "permissions": [
