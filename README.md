@@ -6,7 +6,7 @@ This project creates and helps to manage the CloudFormation stacks of the KIMS a
 
 1. You need to install the following
  - AWS-CLI; https://aws.amazon.com/cli/
- - AWS CDK; https://aws.amazon.com/cdk/ (npm -g install typescript)
+ - AWS CDK; https://aws.amazon.com/cdk/ (npm -g install cdk)
 
 2. You need to have your AWS CLI credentials file setup with the "aws_access_key_id" and "aws_secret_access_key" for the
 account/environment you wish to deploy. There are multiple ways of managing these but the following seems to be the best
@@ -30,6 +30,11 @@ to do a quick S3 directory listing from the command line of where you want to ru
 aws s3 ls
 ```
 
+3. Clone the "kims-settings" project (git clone git@github.com:docgovtnz/kims-settings.git) this contains a large collection
+of different environment .env files and .json files with all of the environment properties needed to define each of the
+environments KIMS is deployed into.
+
+
 4. These scripts depend on the following environment variables to select the properties of the environment you wish to
 deploy the application into.
 
@@ -37,7 +42,7 @@ ENV_HOME - the directory of where all the different environments are held
 ENV_NAME - the specific environment name/directory you wish to work with next
 
 For example;
-export ENV_HOME=/Users/richardperfect/Dev/kims-infra/env
+export ENV_HOME=/Users/richardperfect/Dev/kims-settings/env
 export ENV_NAME=dev
 
 ## Environment setup
