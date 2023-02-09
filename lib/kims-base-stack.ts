@@ -13,7 +13,7 @@ import {ISecurityGroup} from 'aws-cdk-lib/aws-ec2';
 export class KimsBaseStack extends Stack {
     constructor(scope: Construct, id: string, props: MyStackProps) {
         super(scope, id, props);
-
+        console.log('##########basestack');
         const ENV_NAME = process.env.ENV_NAME;
         if(!ENV_NAME) {
             throw new Error('ENV_NAME is not defined');
@@ -68,7 +68,7 @@ export class KimsBaseStack extends Stack {
             },
             enableDataApi: true
         });
-
+        console.log(`meta bucket${ENV_NAME}`);
         const metaBucket = new s3.Bucket(this, 'MetaBucket', {
             bucketName: `${ENV_NAME}-kims-meta`,
             publicReadAccess: false,

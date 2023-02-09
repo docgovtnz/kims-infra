@@ -15,7 +15,7 @@ on:
         required: true
 
   repository_dispatch:
-    types: [dev,uat,test,prod]
+    types: [sandpit,dev,uat,test,prod]
 
 jobs:
   dump:
@@ -76,7 +76,7 @@ jobs:
       - name: cdk deploy
         uses: youyo/aws-cdk-github-actions@v2
         with:
-          cdk_subcommand: 'synth'
+          cdk_subcommand: 'deploy'
           cdk_args: '--debug'
           working_dir: '.'
           debug_log: true
@@ -84,6 +84,6 @@ jobs:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           ENV_HOME: 'env'
-          ENV_NAME: 'dev'
+          ENV_NAME: ${{github.event.action}}
           AWS_DEFAULT_REGION: ap-southeast-2
           AWS_DEFAULT_OUTPUT: json
