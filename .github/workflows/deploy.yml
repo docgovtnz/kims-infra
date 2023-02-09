@@ -1,5 +1,5 @@
 name: deploy
-run-name: Deployment to ${{inputs.environment}} by ${{ github.actor }} ${{ github.event.head_commit.message }} (${{ inputs.description }})
+run-name: Deployment to ${{event.client_payload.env}} by ${{ github.actor }} ${{ github.event.head_commit.message }}
 on:
   workflow_call:
     inputs:
@@ -45,10 +45,8 @@ jobs:
           token: ${{ secrets.GH_PAT }}
           fetch-depth: 0
           path: './settings'
-      - name: pwd
-        run: pwd
-      - name: ls
-        run: ls
+      - name: dump gh
+        run: echo '${{ toJSON(github )}}'
       - name: Move config files
         run: mv settings/* .
       - uses: actions/setup-node@v3
