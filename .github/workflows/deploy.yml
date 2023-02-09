@@ -20,13 +20,13 @@ on:
 jobs:
   dump:
     runs-on: ubuntu-latest
-    environment: ${{event.action}}
+    environment: ${{github.event.action}}
     steps:
       - name: Dump context
         uses: crazy-max/ghaction-dump-context@v1
   deploy-stack:
     runs-on: ubuntu-latest
-    environment: ${{event.action}}
+    environment: ${{github.event.action}}
     steps:
       - name: Checkout infra
         uses: actions/checkout@v3
