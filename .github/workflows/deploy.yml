@@ -13,25 +13,9 @@ on:
         required: true
       AWS_SECRET_ACCESS_KEY:
         required: true
-  workflow_dispatch:
-    inputs:
-      environment:
-        description: 'Environment to deploy to'
-        required: true
-        type: choice
-        options:
-          - sandpit
-          - dev
-          - uat
-          - test
-          - prod
 
-      description:
-        type: string
-        description: ""
-        default: ""
   repository_dispatch:
-    types: [dev]
+    types: [dev,uat,test,prod]
 
 jobs:
   dump:
@@ -41,7 +25,7 @@ jobs:
         uses: crazy-max/ghaction-dump-context@v1
   deploy-stack:
     runs-on: ubuntu-latest
-    environment: ${{inputs.environment}}
+    environment: ${{event.action}}
     steps:
       - name: Checkout infra
         uses: actions/checkout@v3
@@ -101,6 +85,6 @@ jobs:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           ENV_HOME: 'env'
-          ENV_NAME: ${{inputs.environment}}
+          ENV_NAME: ${{environment}}
           AWS_DEFAULT_REGION: ap-southeast-2
           AWS_DEFAULT_OUTPUT: json
