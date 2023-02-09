@@ -86,6 +86,6 @@ jobs:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           ENV_HOME: 'env'
-          ENV_NAME: ${{dev}}
+          ENV_NAME: dev
           AWS_DEFAULT_REGION: ap-southeast-2
           AWS_DEFAULT_OUTPUT: json
