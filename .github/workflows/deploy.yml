@@ -77,7 +77,7 @@ jobs:
         uses: youyo/aws-cdk-github-actions@v2
         with:
           cdk_subcommand: 'deploy'
-          cdk_args: '--debug'
+          cdk_args: '--debug --require-approval never'
           working_dir: '.'
           debug_log: true
         env:
