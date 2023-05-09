@@ -94,3 +94,4 @@ TIPS
 ```shell
 aws logs tail /aws/lambda/dev-kims-docker-function --follow
 ```
+
