@@ -42,7 +42,7 @@ ENV_HOME - the directory of where all the different environments are held
 ENV_NAME - the specific environment name/directory you wish to work with next
 
 For example;
-export ENV_HOME=/Users/richardperfect/Dev/kims-settings/env
+export ENV_HOME=/Users/richardperfect/Dev/perfect-consulting/kims-settings/env
 export ENV_NAME=dev
 
 ## Environment setup
