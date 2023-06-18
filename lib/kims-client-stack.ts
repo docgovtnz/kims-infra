@@ -16,7 +16,11 @@ export class KimsClientStack extends Stack {
         super(scope, id, props);
 
         // This is the permanent location of all releases, it can have IAM policies to allow cross-account sharing
-        const releaseBucket = cdk.aws_s3.Bucket.fromBucketArn(this, 'ReleaseBucket', props.clientEnvMap.S3_RELEASE_BUCKET_ARN);
+        const releaseBucket = cdk.aws_s3.Bucket.fromBucketAttributes(this, 'ReleaseBucket', {
+            bucketArn: props.clientEnvMap.S3_RELEASE_BUCKET_ARN,
+            region: props.env?.region,
+            account: props.env?.account,
+        });
 
         // The certificate that we need later for cloud front
         const certificate = cdk.aws_certificatemanager.Certificate.fromCertificateArn(this, 'Certificate', props.clientEnvMap.CLOUD_FRONT_CERTIFICATE);
