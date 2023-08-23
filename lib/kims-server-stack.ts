@@ -14,7 +14,7 @@ export class KimsServerStack extends Stack {
             // Copy the meta files into the meta bucket
             const metaBucket = cdk.aws_s3.Bucket.fromBucketName(this, 'MetaBucket', props.serverEnvMap.META_BUCKET_NAME);
             const metaFilesDeployment = new cdk.aws_s3_deployment.BucketDeployment(this, 'MetaFiles', {
-                sources: [cdk.aws_s3_deployment.Source.asset(`env/${process.env.ENV_NAME}/meta`)],
+                sources: [cdk.aws_s3_deployment.Source.asset(process.env.ENV_HOME + `/${process.env.ENV_NAME}/meta`)],
                 destinationBucket: metaBucket,
                 destinationKeyPrefix: `meta`
             });
