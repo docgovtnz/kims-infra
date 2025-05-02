@@ -73,12 +73,16 @@ export class KimsServerStack extends Stack {
             }
 
             const metaBucketS3Arn = 'arn:aws:s3:::' + props.serverEnvMap.META_BUCKET_NAME;
+            const mediaBucketS3Arn = 'arn:aws:s3:::' + 'dev2-kims-media';
+
 
             dockerImageFunction.addToRolePolicy(new cdk.aws_iam.PolicyStatement({
                 effect: Effect.ALLOW,
                 resources: [
                     metaBucketS3Arn,
-                    metaBucketS3Arn + '/*'
+                    metaBucketS3Arn + '/*',
+                    mediaBucketS3Arn,
+                    mediaBucketS3Arn + '/*'
                 ],
                 actions: [
                     's3:DeleteObject',
