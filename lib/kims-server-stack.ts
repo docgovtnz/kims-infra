@@ -30,7 +30,7 @@ export class KimsServerStack extends Stack {
             code: cdk.aws_lambda.DockerImageCode.fromEcr(repo, {
                 tagOrDigest: props.serverEnvMap.SERVER_RELEASE
             }),
-            timeout: Duration.seconds(30),
+            timeout: Duration.seconds(60),
             functionName: lambdaFunctionName,
             memorySize: 256,
         }
