@@ -3,6 +3,7 @@ import {Duration, RemovalPolicy, Stack} from 'aws-cdk-lib';
 import {Construct} from 'constructs';
 import {MyStackProps} from '../bin/kims-infra';
 import {
+    AccessLevel,
     AllowedMethods,
     CacheHeaderBehavior,
     CacheQueryStringBehavior,
@@ -36,23 +37,18 @@ export class KimsClientStack extends Stack {
 
         this.clientReleaseBucket = this.createClientReleaseBucket(props);
 
-        // Setup the OAI ourselves so that we can reference it in this script, this is the identity that cloudfront will
-        // use when it needs to retrieve the web files. In the AWS docs OAI is described as "legacy" but at the time of
-        // writing CDK does not yet support the newer "OAC" approach and so we still use "OAI"
-        const originAccessIdentity = new cdk.aws_cloudfront.OriginAccessIdentity(this, 'OriginAccessIdentity', {
-            comment: 'Created by CDK for kims-client cloud front distribution'
-
-        });
-
-        // Give the OAI read access to the deployment bucket
-        this.clientReleaseBucket.grantRead(originAccessIdentity);
-
-        // Cloudfront will use this as the origin of the release, rather than fight with the zip/unzip path names we're
-        // just going to reference the main website client folder from the dist/kims-client path it gets unpacked with.
-        const releaseDeploymentOrigin = cdk.aws_cloudfront_origins.S3BucketOrigin.withOriginAccessIdentity(this.clientReleaseBucket, {
+        // This "origin" of the website resources
+        const releaseDeploymentOrigin = cdk.aws_cloudfront_origins.S3BucketOrigin.withOriginAccessControl(this.clientReleaseBucket, {
             originPath: 'dist/kims-client',
-            originAccessIdentity: originAccessIdentity
+            originAccessLevels: [ AccessLevel.READ ]
         });
+
+        // The client.json sits at the root level of the deployment bucket. One nice side effect is that it acts a bit
+        // like a transaction receipt of the deployed release
+        const clientJsonDeploymentOrigin = cdk.aws_cloudfront_origins.S3BucketOrigin.withOriginAccessControl(this.clientReleaseBucket, {
+            originAccessLevels: [ AccessLevel.READ ]
+        });
+
 
         // Declare the CloudFront distribution and link it to the resources it will host
         const distribution = new cdk.aws_cloudfront.Distribution(this, props.serverEnvMap.APP_NAME_PREFIX + '-cloud-front', {
@@ -69,22 +65,20 @@ export class KimsClientStack extends Stack {
             certificate: this.certificate,
         });
 
-        // The client.json sits at the root level of the deployment bucket. One nice side effect is that it acts a bit
-        // like a transaction receipt of the deployed release
-        const clientJsonDeploymentOrigin = cdk.aws_cloudfront_origins.S3BucketOrigin.withOriginAccessIdentity(this.clientReleaseBucket, {
-            originAccessIdentity: originAccessIdentity
+        // The index.html is cache disabled, otherwise the browser gets stuck with cached old releases
+        distribution.addBehavior('index.html', releaseDeploymentOrigin, {
+            cachePolicy: cdk.aws_cloudfront.CachePolicy.CACHING_DISABLED
         });
 
-        // It is only downloaded once each time the App launches, but needs to be fresh otherwise settings and things
+        // The client.json is only downloaded once each time the App launches, but needs to be fresh otherwise settings and things
         // like version numbers will be wrong
         distribution.addBehavior('client.json', clientJsonDeploymentOrigin, {
             cachePolicy: cdk.aws_cloudfront.CachePolicy.CACHING_DISABLED,
         });
 
-        // The index.html is cache disabled, otherwise the browser gets stuck with cached old releases
-        distribution.addBehavior('index.html', releaseDeploymentOrigin, {
-            cachePolicy: cdk.aws_cloudfront.CachePolicy.CACHING_DISABLED
-        });
+
+
+        ///////////////////
 
         // Find out what the APIGateway address is of the Lambda function
         // Lookup the output value from the KimsServerStack and use that as part of a naming pattern
