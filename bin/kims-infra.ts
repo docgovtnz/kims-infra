@@ -6,6 +6,7 @@ import * as fs from 'fs';
 import {KimsServerStack} from '../lib/kims-server-stack';
 import {KimsClientStack} from '../lib/kims-client-stack';
 import {KimsBaseStack} from '../lib/kims-base-stack';
+import {KimsCognitoStack} from "../lib/kims-cognito-stack";
 
 export interface AwsEnvMap {
     AWS_ACCOUNT: string;
@@ -81,5 +82,6 @@ const myStackProps = loadMyStackProps();
 const app = new cdk.App();
 
 new KimsBaseStack(app, process.env.ENV_NAME + '-kims-base-stack', myStackProps);
+new KimsCognitoStack(app, process.env.ENV_NAME + '-kims-cognito-stack', myStackProps);
 new KimsServerStack(app, process.env.ENV_NAME + '-kims-server-stack', myStackProps);
 new KimsClientStack(app, process.env.ENV_NAME + '-kims-client-stack', myStackProps);
